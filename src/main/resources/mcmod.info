@@ -1,0 +1,16 @@
+[
+{
+  "modid": "isbrhcore",
+  "name": "ISBRH Core",
+  "description": "ISBRH: The Return",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Thog"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
