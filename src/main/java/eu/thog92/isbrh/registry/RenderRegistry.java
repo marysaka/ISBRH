@@ -13,6 +13,7 @@ import net.minecraft.world.IBlockAccess;
 import com.google.common.collect.Maps;
 
 import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
+import eu.thog92.isbrh.render.TextureLoader;
 
 public class RenderRegistry {
 
@@ -22,6 +23,8 @@ public class RenderRegistry {
 
 	private Map<Integer, ISimpleBlockRenderingHandler> renders = Maps
 			.newHashMap();
+	
+	private TextureLoader loader = new TextureLoader();
 
 	public static RenderRegistry instance() {
 		return INSTANCE;
@@ -84,7 +87,9 @@ public class RenderRegistry {
 	}
 
 	public void injectTexture(TextureMap map) {
+		loader.setTextureMap(map);
+
 		for(ISimpleBlockRenderingHandler isbrh : renders.values())
-			isbrh.loadTextures(map);
+			isbrh.loadTextures(loader);
 	}
 }

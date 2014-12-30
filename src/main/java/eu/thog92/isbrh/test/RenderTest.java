@@ -5,14 +5,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import eu.thog92.isbrh.ISBRH;
 import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
+import eu.thog92.isbrh.render.TextureLoader;
 
 public class RenderTest implements ISimpleBlockRenderingHandler {
 
@@ -23,6 +24,7 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 		
 		ItemStack demoStack = new ItemStack(Blocks.sand, 1);
 		Minecraft.getMinecraft().getRenderItem().renderItem(demoStack, Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getItemModel(demoStack));
+		
 	}
 	
 
@@ -31,15 +33,18 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, BlockPos pos,
 			IBlockState state, int id, WorldRenderer renderer) {
-		GlStateManager.pushMatrix();
-		TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("isbrhcore:blocks/test");
+		TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry(textureLocation.toString());
 		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
-		System.out.println(sprite);
+		
 		renderer.addVertexWithUV(x, y, z, sprite.getMaxU(), sprite.getMinV());
 		renderer.addVertexWithUV(x, y + 1, z, sprite.getMaxU(), sprite.getMaxV());
 		renderer.addVertexWithUV(x + 1, y + 1, z, sprite.getMinU(), sprite.getMaxV());
 		renderer.addVertexWithUV(x + 1, y, z, sprite.getMinU(), sprite.getMinV());
-		GlStateManager.popMatrix();
+		
+		renderer.addVertexWithUV(x + 1, y, z, sprite.getMaxU(), sprite.getMinV());
+		renderer.addVertexWithUV(x + 1, y + 1, z, sprite.getMaxU(), sprite.getMaxV());
+		renderer.addVertexWithUV(x + 1, y + 1, z + 1, sprite.getMinU(), sprite.getMaxV());
+		renderer.addVertexWithUV(x + 1, y, z + 1, sprite.getMinU(), sprite.getMinV());
 
 		return true;
 	}
@@ -61,9 +66,8 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public void loadTextures(TextureMap map) {
-		TextureAtlasSprite atlas = map.registerSprite(textureLocation);
-		map.setTextureEntry("isbrhcore:blocks/test", atlas);
+	public void loadTextures(TextureLoader loader) {
+		loader.registerTexture(textureLocation);
 	}
 
 }
