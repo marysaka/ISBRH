@@ -3,6 +3,9 @@ package eu.thog92.isbrh.test;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import eu.thog92.isbrh.ISBRH;
@@ -22,6 +25,17 @@ public class BlockTest extends Block {
 	@SideOnly(Side.CLIENT)
 	public int getRenderType() {
 		return ISBRH.testId;
+	}
+	
+	@Override
+	public boolean isNormalCube() {
+		return false;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return true;
 	}
 
 }

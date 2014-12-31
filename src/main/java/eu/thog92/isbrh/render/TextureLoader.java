@@ -1,5 +1,6 @@
 package eu.thog92.isbrh.render;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
