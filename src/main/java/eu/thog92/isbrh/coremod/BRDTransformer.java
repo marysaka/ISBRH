@@ -1,8 +1,5 @@
 package eu.thog92.isbrh.coremod;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,7 +9,6 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
@@ -32,7 +28,14 @@ public class BRDTransformer implements ITransformHandler {
 		while (iterator.hasNext()) {
 			MethodNode m = iterator.next();
 			System.out.println(m.name);
-			if (m.name.equals("renderBlock")) {
+			boolean obfuscated;
+			if ((m.name.equals("renderBlock") && m.desc.equals("(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z")) || (m.name.equals("a") && m.desc.equals("(Lbec;Ldt;Lard;Lciv;)Z"))) {
+				obfuscated = m.name.equals("a");
+				String desc;
+				if(obfuscated)
+					desc = "(ILbec;Ldt;Lard;Lciv;)Z";
+				else
+					desc = "(ILnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z";
 				for (int i = 0; i < m.instructions.size(); i++) {
 					AbstractInsnNode insn = m.instructions.get(i);
 					if (insn.getOpcode() == Opcodes.ICONST_0) {
@@ -54,7 +57,7 @@ public class BRDTransformer implements ITransformHandler {
 								Opcodes.INVOKEVIRTUAL,
 								"eu/thog92/isbrh/registry/RenderRegistry",
 								"renderBlock",
-								"(ILnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z",
+								desc,
 								false));
 
 						m.instructions.insertBefore(insn, toInject);

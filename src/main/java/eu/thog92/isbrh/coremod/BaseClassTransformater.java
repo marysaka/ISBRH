@@ -18,7 +18,7 @@ public class BaseClassTransformater implements IClassTransformer {
 	private HashMap<String, ITransformHandler> handlers = Maps.newHashMap();
 
 	public BaseClassTransformater() {
-		classToPatch.put("net.minecraft.client.renderer.BlockRendererDispatcher", "ho");
+		classToPatch.put("net.minecraft.client.renderer.BlockRendererDispatcher", "cll");
 		handlers.put("net.minecraft.client.renderer.BlockRendererDispatcher", new BRDTransformer());
 
 	}

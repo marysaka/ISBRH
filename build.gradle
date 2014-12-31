@@ -68,3 +68,13 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+jar {
+    manifest {
+        attributes("FMLCorePlugin": "eu.thog92.isbrh.coremod.ISBRHILoadingPlugin", "FMLCorePluginContainsFMLMod": "true")
+    }
+}
+
+runClient {
+    jvmArgs '-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin'
+}
