@@ -56,8 +56,8 @@ public class SimpleBlockRender {
 		this.renderFromInside = value;
 	}
 
-	public void setRenderBounds(double minX, double maxX, double minY,
-			double maxY, double minZ, double maxZ) {
+	public void setRenderBounds(double minX, double minY, double minZ,
+			double maxX, double maxY, double maxZ) {
 		this.renderMinX = minX;
 		this.renderMaxX = maxX;
 		this.renderMinY = minY;

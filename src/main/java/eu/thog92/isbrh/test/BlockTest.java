@@ -29,7 +29,7 @@ public class BlockTest extends Block {
 	
 	@Override
 	public boolean isNormalCube() {
-		return false;
+		return true;
 	}
 
 	@SideOnly(Side.CLIENT)

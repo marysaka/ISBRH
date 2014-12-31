@@ -2,7 +2,6 @@ package eu.thog92.isbrh.test;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
@@ -25,7 +24,7 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(ItemStack itemStack, int renderId) {
-
+		//TODO: really use the render
 		ItemStack demoStack = new ItemStack(Blocks.sand, 1);
 		Minecraft
 				.getMinecraft()
@@ -39,36 +38,17 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, BlockPos pos,
 			IBlockState state, int id, WorldRenderer renderer) {
-		TextureAtlasSprite sprite = Minecraft.getMinecraft()
-				.getTextureMapBlocks()
-				.getTextureExtry(textureLocation.toString());
-		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		SimpleBlockRender render = new SimpleBlockRender(renderer);
 
+		
 		render.setRenderBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.1F, 0.8F);
 		render.renderStandardBlock(this, pos);
+		
 		render.setRenderBounds(0.45F, 0.1F, 0.45F, 0.55F, 0.8F, 0.55F);
 		render.renderStandardBlock(this, pos);
+		
 		render.setRenderBounds(0.0F, 0.8F, 0.0F, 1F, 0.9F, 1F);
 		render.renderStandardBlock(this, pos);
-
-		// renderer.addVertexWithUV(x, y, z, sprite.getMaxU(),
-		// sprite.getMinV());
-		// renderer.addVertexWithUV(x, y + 1, z, sprite.getMaxU(),
-		// sprite.getMaxV());
-		// renderer.addVertexWithUV(x + 1, y + 1, z, sprite.getMinU(),
-		// sprite.getMaxV());
-		// renderer.addVertexWithUV(x + 1, y, z, sprite.getMinU(),
-		// sprite.getMinV());
-		//
-		// renderer.addVertexWithUV(x + 1, y, z, sprite.getMaxU(),
-		// sprite.getMinV());
-		// renderer.addVertexWithUV(x + 1, y + 1, z, sprite.getMaxU(),
-		// sprite.getMaxV());
-		// renderer.addVertexWithUV(x + 1, y + 1, z + 1, sprite.getMinU(),
-		// sprite.getMaxV());
-		// renderer.addVertexWithUV(x + 1, y, z + 1, sprite.getMinU(),
-		// sprite.getMinV());
 
 		return true;
 	}
@@ -84,8 +64,13 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
+	/**
+	 * Used when a Enderman or a Golem hold the block
+	 */
 	public void renderBlockBrightness(int renderId, IBlockState state,
 			float brightness) {
+		
+		//TODO: really use the render
 		Minecraft
 				.getMinecraft()
 				.getBlockRendererDispatcher()
