@@ -46,7 +46,7 @@ public class BaseClassTransformater implements IClassTransformer {
 			ZipFile zip = new ZipFile(location);
 			ZipEntry entry = zip.getEntry(name.replace('.', '/') + ".class");
 			if (entry == null) {
-				System.out.println("[Vchat]:" + name + " not found in "
+				System.out.println("[ISBRH]:" + name + " not found in "
 						+ location.getName());
 			} else {
 				// serialize the class file into the bytes array
@@ -54,7 +54,7 @@ public class BaseClassTransformater implements IClassTransformer {
 				bytes = new byte[(int) entry.getSize()];
 				zin.read(bytes);
 				zin.close();
-				System.out.println("[Vchat]: " + "Class " + name + " patched!");
+				System.out.println("[ISBRH]: " + "Class " + name + " patched!");
 			}
 			zip.close();
 		} catch (Exception e) {
