@@ -85,8 +85,7 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public TextureAtlasSprite getSidedTexture(EnumFacing down) {
-
+	public TextureAtlasSprite getSidedTexture(EnumFacing facing) {
 		return textureLoader.getTextureMap().getTextureExtry(
 				textureLocation.toString());
 	}

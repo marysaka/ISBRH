@@ -10,17 +10,17 @@ import net.minecraft.world.IBlockAccess;
 
 public interface ISimpleBlockRenderingHandler {
 	
-	public abstract void renderInventoryBlock(ItemStack itemStack, int renderId);
+	void renderInventoryBlock(ItemStack itemStack, int renderId);
 
-	public abstract boolean renderWorldBlock(IBlockAccess world, BlockPos pos, IBlockState state, int renderId, WorldRenderer renderer);
+	boolean renderWorldBlock(IBlockAccess world, BlockPos pos, IBlockState state, int renderId, WorldRenderer renderer);
 
-	public abstract void renderBlockBrightness(int renderId, IBlockState state, float brightness);
-	
-	public abstract void loadTextures(TextureLoader loader);
+	void renderBlockBrightness(int renderId, IBlockState state, float brightness);
 
-	public abstract boolean shouldRender3DInInventory(int renderId);
+	void loadTextures(TextureLoader loader);
 
-	public abstract int getRenderId();
+	boolean shouldRender3DInInventory(int renderId);
 
-	public abstract TextureAtlasSprite getSidedTexture(EnumFacing down);
+	int getRenderId();
+
+	TextureAtlasSprite getSidedTexture(EnumFacing facing);
 }
