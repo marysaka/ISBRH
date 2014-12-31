@@ -3,6 +3,7 @@ package eu.thog92.isbrh.render;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
@@ -32,24 +33,24 @@ public class SimpleBlockRender {
 	public int brightnessTopLeft, brightnessBottomLeft, brightnessBottomRight,
 			brightnessTopRight;
 
-	private boolean enableAO;
-
-	private boolean partialRenderBounds;
+	public boolean enableAO;
 
 	private Minecraft minecraftRB;
 
 	private World world;
 
-	private boolean renderAllFaces;
-
-	public SimpleBlockRender(WorldRenderer renderer) {
-		this.worldRenderer = renderer;
+	public boolean renderAllFaces;
+	
+	public SimpleBlockRender(){
 		this.renderMaxX = 1.0;
 		this.renderMaxY = 1.0;
 		this.renderMaxZ = 1.0;
 		this.minecraftRB = Minecraft.getMinecraft();
-		// TODO: Need to check that
-		this.world = minecraftRB.theWorld;
+	}
+	
+	public SimpleBlockRender(WorldRenderer renderer) {
+		this();
+		this.worldRenderer = renderer;
 	}
 
 	public void setRenderFromInside(boolean value) {
@@ -64,17 +65,13 @@ public class SimpleBlockRender {
 		this.renderMaxY = maxY;
 		this.renderMinZ = minZ;
 		this.renderMaxZ = maxZ;
-		this.partialRenderBounds = this.minecraftRB.gameSettings.ambientOcclusion >= 2
-				&& (this.renderMinX > 0.0D || this.renderMaxX < 1.0D
-						|| this.renderMinY > 0.0D || this.renderMaxY < 1.0D
-						|| this.renderMinZ > 0.0D || this.renderMaxZ < 1.0D);
 	}
 
 	/**
 	 * Renders the given texture to the bottom face of the block. Args: block,
 	 * x, y, z, texture
 	 */
-	public void renderFaceYNeg(Block block, double x, double y, double z,
+	public void renderFaceYNeg(double x, double y, double z,
 			TextureAtlasSprite texture) {
 
 		double d3 = (double) texture.getInterpolatedU(this.renderMinX * 16.0D);
@@ -175,10 +172,10 @@ public class SimpleBlockRender {
 	}
 
 	/**
-	 * Renders the given texture to the top face of the block. Args: block, x,
+	 * Renders the given texture to the top face of the block. Args: x,
 	 * y, z, texture
 	 */
-	public void renderFaceYPos(Block block, double x, double y, double z,
+	public void renderFaceYPos(double x, double y, double z,
 			TextureAtlasSprite texture) {
 
 		double d3 = (double) texture.getInterpolatedU(this.renderMinX * 16.0D);
@@ -281,9 +278,9 @@ public class SimpleBlockRender {
 
 	/**
 	 * Renders the given texture to the north (z-negative) face of the block.
-	 * Args: block, x, y, z, texture
+	 * Args: x, y, z, texture
 	 */
-	public void renderFaceZNeg(Block block, double x, double y, double z,
+	public void renderFaceZNeg(double x, double y, double z,
 			TextureAtlasSprite texture) {
 
 		double d3 = (double) texture.getInterpolatedU(this.renderMinX * 16.0D);
@@ -393,9 +390,9 @@ public class SimpleBlockRender {
 
 	/**
 	 * Renders the given texture to the south (z-positive) face of the block.
-	 * Args: block, x, y, z, texture
+	 * Args: x, y, z, texture
 	 */
-	public void renderFaceZPos(Block block, double x, double y, double z,
+	public void renderFaceZPos(double x, double y, double z,
 			TextureAtlasSprite texture) {
 
 		double d3 = (double) texture.getInterpolatedU(this.renderMinX * 16.0D);
@@ -504,9 +501,9 @@ public class SimpleBlockRender {
 
 	/**
 	 * Renders the given texture to the west (x-negative) face of the block.
-	 * Args: block, x, y, z, texture
+	 * Args: x, y, z, texture
 	 */
-	public void renderFaceXNeg(Block block, double x, double y, double z,
+	public void renderFaceXNeg(double x, double y, double z,
 			TextureAtlasSprite texture) {
 
 		double d3 = (double) texture.getInterpolatedU(this.renderMinZ * 16.0D);
@@ -615,9 +612,9 @@ public class SimpleBlockRender {
 
 	/**
 	 * Renders the given texture to the east (x-positive) face of the block.
-	 * Args: block, x, y, z, texture
+	 * Args: x, y, z, texture
 	 */
-	public void renderFaceXPos(Block block, double x, double y, double z,
+	public void renderFaceXPos(double x, double y, double z,
 			TextureAtlasSprite texture) {
 
 		double d3 = (double) texture.getInterpolatedU(this.renderMinZ * 16.0D);
@@ -723,9 +720,48 @@ public class SimpleBlockRender {
 			worldRenderer.addVertexWithUV(d11, d13, d15, d3, d5);
 		}
 	}
+	
+	public boolean renderInventoryStandardBlock(ISimpleBlockRenderingHandler render, Tessellator tessellator){
+		
+		this.renderFromInside = true;
+		// Inside Render
+		worldRenderer.startDrawingQuads();
+		worldRenderer.setNormal(0.0F, -1F, 0.0F);
+		this.renderFaceYNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.DOWN));
+		worldRenderer.setNormal(0.0F, 1.0F, 0.0F);
+		this.renderFaceYPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.UP));
+		worldRenderer.setNormal(0.0F, 0.0F, -1F);
+		this.renderFaceZNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.NORTH));
+		worldRenderer.setNormal(0.0F, 0.0F, 1.0F);
+		this.renderFaceZPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.SOUTH));
+		worldRenderer.setNormal(-1F, 0.0F, 0.0F);
+		this.renderFaceXNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.WEST));
+		worldRenderer.setNormal(1.0F, 0.0F, 0.0F);
+		this.renderFaceXPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.EAST));
+		tessellator.draw();
+		this.renderFromInside = false;
+		// Normal Render
+		worldRenderer.startDrawingQuads();
+		worldRenderer.setNormal(0.0F, -1F, 0.0F);
+		this.renderFaceYNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.DOWN));
+		worldRenderer.setNormal(0.0F, 1.0F, 0.0F);
+		this.renderFaceYPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.UP));
+		worldRenderer.setNormal(0.0F, 0.0F, -1F);
+		this.renderFaceZNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.NORTH));
+		worldRenderer.setNormal(0.0F, 0.0F, 1.0F);
+		this.renderFaceZPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.SOUTH));
+		worldRenderer.setNormal(-1F, 0.0F, 0.0F);
+		this.renderFaceXNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.WEST));
+		worldRenderer.setNormal(1.0F, 0.0F, 0.0F);
+		this.renderFaceXPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.EAST));
+		tessellator.draw();
+		return true;
+	}
 
 	public boolean renderStandardBlock(ISimpleBlockRenderingHandler render,
 			BlockPos pos) {
+		if(world == null)
+			world = minecraftRB.theWorld;
 		Block block = this.world.getBlockState(pos).getBlock();
 		int l = this.world.getBlockState(pos).getBlock()
 				.colorMultiplier(this.world, pos);
@@ -751,11 +787,13 @@ public class SimpleBlockRender {
 
 	/**
 	 * Renders a standard cube block at the given coordinates, with a given
-	 * color ratio. Args: block, x, y, z, r, g, b
+	 * color ratio. Args: block, pos, r, g, b
 	 */
 	public boolean renderStandardBlockWithColorMultiplier(Block block,
 			ISimpleBlockRenderingHandler render, BlockPos pos, float r,
 			float g, float b) {
+		if(world == null)
+			world = minecraftRB.theWorld;
 		this.enableAO = false;
 		boolean flag = false;
 		float f3 = 0.5F;
@@ -795,7 +833,7 @@ public class SimpleBlockRender {
 			worldRenderer.setBrightness(this.renderMinY > 0.0D ? l : block
 					.getMixedBrightnessForBlock(world, pos.down()));
 			worldRenderer.setColorOpaque_F(f10, f13, f16);
-			this.renderFaceYNeg(block, pos.getX(), pos.getY(), pos.getZ(),
+			this.renderFaceYNeg(pos.getX(), pos.getY(), pos.getZ(),
 					render.getSidedTexture(EnumFacing.DOWN));
 			flag = true;
 		}
@@ -805,7 +843,7 @@ public class SimpleBlockRender {
 			worldRenderer.setBrightness(this.renderMaxY < 1.0D ? l : block
 					.getMixedBrightnessForBlock(world, pos.up()));
 			worldRenderer.setColorOpaque_F(f7, f8, f9);
-			this.renderFaceYPos(block, pos.getX(), pos.getY(), pos.getZ(),
+			this.renderFaceYPos(pos.getX(), pos.getY(), pos.getZ(),
 					render.getSidedTexture(EnumFacing.UP));
 			flag = true;
 		}
@@ -816,7 +854,7 @@ public class SimpleBlockRender {
 			worldRenderer.setBrightness(this.renderMinZ > 0.0D ? l : block
 					.getMixedBrightnessForBlock(world, pos.north()));
 			worldRenderer.setColorOpaque_F(f11, f14, f17);
-			this.renderFaceZNeg(block, pos.getX(), pos.getY(), pos.getZ(),
+			this.renderFaceZNeg(pos.getX(), pos.getY(), pos.getZ(),
 					render.getSidedTexture(EnumFacing.NORTH));
 
 			flag = true;
@@ -828,7 +866,7 @@ public class SimpleBlockRender {
 			worldRenderer.setBrightness(this.renderMaxZ < 1.0D ? l : block
 					.getMixedBrightnessForBlock(world, pos.south()));
 			worldRenderer.setColorOpaque_F(f11, f14, f17);
-			this.renderFaceZPos(block, pos.getX(), pos.getY(), pos.getZ(),
+			this.renderFaceZPos(pos.getX(), pos.getY(), pos.getZ(),
 					render.getSidedTexture(EnumFacing.SOUTH));
 
 			flag = true;
@@ -841,7 +879,7 @@ public class SimpleBlockRender {
 					.getMixedBrightnessForBlock(world, pos.west()));
 			worldRenderer.setColorOpaque_F(f12, f15, f18);
 			;
-			this.renderFaceXNeg(block, pos.getX(), pos.getY(), pos.getZ(),
+			this.renderFaceXNeg(pos.getX(), pos.getY(), pos.getZ(),
 					render.getSidedTexture(EnumFacing.WEST));
 
 			flag = true;
@@ -853,7 +891,7 @@ public class SimpleBlockRender {
 			worldRenderer.setBrightness(this.renderMaxX < 1.0D ? l : block
 					.getMixedBrightnessForBlock(world, pos.east()));
 			worldRenderer.setColorOpaque_F(f12, f15, f18);
-			this.renderFaceXPos(block, pos.getX(), pos.getY(), pos.getZ(),
+			this.renderFaceXPos(pos.getX(), pos.getY(), pos.getZ(),
 					render.getSidedTexture(EnumFacing.EAST));
 
 			flag = true;

@@ -251,7 +251,7 @@ public class RenderItem implements IResourceManagerReloadListener
     public boolean shouldRenderItemIn3D(ItemStack stack)
     {
         IBakedModel ibakedmodel = this.itemModelMesher.getItemModel(stack);
-        if(ibakedmodel == null)	return RenderRegistry.instance().shouldRender3DInInventory(stack);
+        if(ibakedmodel == null || ibakedmodel == this.itemModelMesher.getModelManager().getMissingModel())	return RenderRegistry.instance().shouldRender3DInInventory(stack);
         return ibakedmodel.isGui3d();
     }
 
