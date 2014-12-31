@@ -61,7 +61,7 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean shouldRender3DInInventory(int id) {
-		return false;
+		return true;
 	}
 
 	@Override
