@@ -26,7 +26,7 @@ public class BlockTest extends Block {
 	public int getRenderType() {
 		return ISBRH.testId;
 	}
-	
+
 	@Override
 	public boolean isNormalCube() {
 		return true;
@@ -34,7 +34,8 @@ public class BlockTest extends Block {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos,
+			EnumFacing face) {
 		return true;
 	}
 

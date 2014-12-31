@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -23,19 +24,19 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 			"isbrhcore:blocks/test");
 	private TextureLoader textureLoader;
 
-
 	@Override
-	public void renderInventoryBlock(ItemStack itemStack, int renderId) {
+	public void renderInventoryBlock(ItemStack itemStack,
+			TransformType transformType, int renderId) {
 		Tessellator tessellator = Tessellator.getInstance();
 		SimpleBlockRender render = new SimpleBlockRender();
 		render.worldRenderer = tessellator.getWorldRenderer();
-		
+
 		render.setRenderBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.1F, 0.8F);
 		this.renderInInventory(tessellator, render);
-		
+
 		render.setRenderBounds(0.45F, 0.1F, 0.45F, 0.55F, 0.8F, 0.55F);
 		this.renderInInventory(tessellator, render);
-		
+
 		render.setRenderBounds(0.0F, 0.8F, 0.0F, 1F, 0.9F, 1F);
 		this.renderInInventory(tessellator, render);
 
@@ -46,13 +47,13 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 			IBlockState state, int id, WorldRenderer renderer) {
 		SimpleBlockRender render = new SimpleBlockRender();
 		render.worldRenderer = renderer;
-		
+
 		render.setRenderBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.1F, 0.8F);
 		render.renderStandardBlock(this, pos);
-		
+
 		render.setRenderBounds(0.45F, 0.1F, 0.45F, 0.55F, 0.8F, 0.55F);
 		render.renderStandardBlock(this, pos);
-		
+
 		render.setRenderBounds(0.0F, 0.8F, 0.0F, 1F, 0.9F, 1F);
 		render.renderStandardBlock(this, pos);
 
@@ -75,8 +76,8 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 	 */
 	public void renderBlockBrightness(int renderId, IBlockState state,
 			float brightness) {
-		
-		//TODO: really use the render
+
+		// TODO: really use the render
 		Minecraft
 				.getMinecraft()
 				.getBlockRendererDispatcher()
@@ -92,10 +93,12 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public TextureAtlasSprite getSidedTexture(EnumFacing facing) {
-		return textureLoader.getTextureMap().getAtlasSprite("minecraft:blocks/planks_oak");
+		return textureLoader.getTextureMap().getAtlasSprite(
+				"minecraft:blocks/planks_oak");
 	}
-	
-	private void renderInInventory(Tessellator tessellator, SimpleBlockRender render){
+
+	private void renderInInventory(Tessellator tessellator,
+			SimpleBlockRender render) {
 		GlStateManager.translate(-0.5F, -0.5F, -0.5F);
 		GlStateManager.pushMatrix();
 		render.renderInventoryStandardBlock(this, tessellator);

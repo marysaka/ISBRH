@@ -1,23 +1,22 @@
 package eu.thog92.isbrh.render;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
 public class TextureLoader {
-	
+
 	private TextureMap textureMap;
-	
-	
-	public void setTextureMap(TextureMap newMap){
+
+	public void setTextureMap(TextureMap newMap) {
 		this.textureMap = newMap;
 	}
-	
+
 	public TextureMap getTextureMap() {
 		return this.textureMap;
 	}
-	
-	public boolean registerTexture(ResourceLocation location){
-		return this.textureMap.setTextureEntry(location.toString(), this.textureMap.registerSprite(location));
+
+	public boolean registerTexture(ResourceLocation location) {
+		return this.textureMap.setTextureEntry(location.toString(),
+				this.textureMap.registerSprite(location));
 	}
 }

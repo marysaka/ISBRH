@@ -17,64 +17,70 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0"
-group= "eu.thog92.isbrhcore" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "isbrhcore"
+// Read properties file
+ext {
+    configFile = file "build.properties"
 
-minecraft {
-    version = "1.8-11.14.0.1280-1.8"
-    runDir = "run"
-    
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_nodoc_20141130"
+    configFile.withReader {
+        // Load config.  It shall from now be referenced as simply config or project.config
+        def prop = new Properties()
+        prop.load(it)
+        config = new ConfigSlurper().parse prop
+    }
 }
 
-dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+version = config.mod.version
+group= "eu.thog92.isbrhcore"
+archivesBaseName = "isbrhcore"
 
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+if (System.env.BUILD_NUMBER != null) version = "$version.$System.env.BUILD_NUMBER"
 
+minecraft {
+    version = "${config.minecraft.version}-${config.forge.version}-${config.minecraft.version}"
+    runDir = "run"
+    mappings = "snapshot_nodoc_20141130"
 }
 
 processResources
 {
-    // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
 
-    // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
                 
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
-    // copy everything else, thats not the mcmod.info
+
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 jar {
     manifest {
-        attributes("FMLCorePlugin": "eu.thog92.isbrh.coremod.ISBRHILoadingPlugin", "FMLCorePluginContainsFMLMod": "true")
+        attributes("FMLCorePlugin": "eu.thog92.isbrh.coremod.ISBRHILoadingPlugin", "FMLAT": "isbrhcore_at.cfg", "FMLCorePluginContainsFMLMod": "true")
     }
 }
 
 runClient {
     jvmArgs '-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+artifacts {
+    archives sourcesJar
+    archives deobfJar
 }

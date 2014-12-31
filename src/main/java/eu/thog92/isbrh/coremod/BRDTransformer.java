@@ -18,7 +18,6 @@ public class BRDTransformer implements ITransformHandler {
 	@Override
 	public byte[] transform(String className, byte[] buffer) {
 
-		InsnList toInject = new InsnList();
 		ClassNode classNode = new ClassNode();
 		ClassReader classReader = new ClassReader(buffer);
 		classReader.accept(classNode, 0);
@@ -27,12 +26,15 @@ public class BRDTransformer implements ITransformHandler {
 		int iconst = 0;
 		while (iterator.hasNext()) {
 			MethodNode m = iterator.next();
-			System.out.println(m.name);
 			boolean obfuscated;
-			if ((m.name.equals("renderBlock") && m.desc.equals("(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z")) || (m.name.equals("a") && m.desc.equals("(Lbec;Ldt;Lard;Lciv;)Z"))) {
+			if ((m.name.equals("renderBlock") && m.desc
+					.equals("(Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z"))
+					|| (m.name.equals("a") && m.desc
+							.equals("(Lbec;Ldt;Lard;Lciv;)Z"))) {
+				InsnList toInject = new InsnList();
 				obfuscated = m.name.equals("a");
 				String desc;
-				if(obfuscated)
+				if (obfuscated)
 					desc = "(ILbec;Ldt;Lard;Lciv;)Z";
 				else
 					desc = "(ILnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z";
@@ -42,7 +44,7 @@ public class BRDTransformer implements ITransformHandler {
 						iconst++;
 						if (iconst != 3)
 							continue;
-						
+
 						toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
 								"eu/thog92/isbrh/registry/RenderRegistry",
 								"instance",
@@ -53,24 +55,49 @@ public class BRDTransformer implements ITransformHandler {
 						toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
 						toInject.add(new VarInsnNode(Opcodes.ALOAD, 3));
 						toInject.add(new VarInsnNode(Opcodes.ALOAD, 4));
-						toInject.add(new MethodInsnNode(
-								Opcodes.INVOKEVIRTUAL,
+						toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
 								"eu/thog92/isbrh/registry/RenderRegistry",
-								"renderBlock",
-								desc,
-								false));
+								"renderBlock", desc, false));
 
 						m.instructions.insertBefore(insn, toInject);
 
-						ClassWriter writer = new ClassWriter(0);
-						classNode.accept(writer);
-						byte[] patched = writer.toByteArray();
-						return patched;
 					}
 				}
 			}
+			if ((m.name.equals("renderBlockBrightness") && m.desc
+					.equals("(Lnet/minecraft/block/state/IBlockState;F)V"))
+					|| (m.name.equals("a") && m.desc.equals("(Lbec;F)V"))) {
+				InsnList toInject = new InsnList();
+				obfuscated = m.name.equals("a");
+				String desc = "(ILnet/minecraft/block/state/IBlockState;F)V";
+				if (obfuscated) {
+					desc = "(ILbec;F)V";
+				}
+				for (int i = 0; i < m.instructions.size(); i++) {
+					AbstractInsnNode insn = m.instructions.get(i);
+					if (insn.getOpcode() == Opcodes.GOTO) {
+						toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+								"eu/thog92/isbrh/registry/RenderRegistry",
+								"instance",
+								"()Leu/thog92/isbrh/registry/RenderRegistry;",
+								false));
+						toInject.add(new VarInsnNode(Opcodes.ILOAD, 3));
+						toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+						toInject.add(new VarInsnNode(Opcodes.FLOAD, 2));
+						toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
+								"eu/thog92/isbrh/registry/RenderRegistry",
+								"renderBlockBrightness", desc, false));
+						m.instructions.insertBefore(insn, toInject);
+						break;
+					}
+				}
+
+			}
 		}
-		return buffer;
+		ClassWriter writer = new ClassWriter(0);
+		classNode.accept(writer);
+		byte[] patched = writer.toByteArray();
+		return patched;
 	}
 
 }

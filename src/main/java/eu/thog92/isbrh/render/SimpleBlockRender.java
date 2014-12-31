@@ -40,14 +40,14 @@ public class SimpleBlockRender {
 	private World world;
 
 	public boolean renderAllFaces;
-	
-	public SimpleBlockRender(){
+
+	public SimpleBlockRender() {
 		this.renderMaxX = 1.0;
 		this.renderMaxY = 1.0;
 		this.renderMaxZ = 1.0;
 		this.minecraftRB = Minecraft.getMinecraft();
 	}
-	
+
 	public SimpleBlockRender(WorldRenderer renderer) {
 		this();
 		this.worldRenderer = renderer;
@@ -172,8 +172,8 @@ public class SimpleBlockRender {
 	}
 
 	/**
-	 * Renders the given texture to the top face of the block. Args: x,
-	 * y, z, texture
+	 * Renders the given texture to the top face of the block. Args: x, y, z,
+	 * texture
 	 */
 	public void renderFaceYPos(double x, double y, double z,
 			TextureAtlasSprite texture) {
@@ -720,47 +720,60 @@ public class SimpleBlockRender {
 			worldRenderer.addVertexWithUV(d11, d13, d15, d3, d5);
 		}
 	}
-	
-	public boolean renderInventoryStandardBlock(ISimpleBlockRenderingHandler render, Tessellator tessellator){
-		
+
+	public boolean renderInventoryStandardBlock(
+			ISimpleBlockRenderingHandler render, Tessellator tessellator) {
+
 		this.renderFromInside = true;
 		// Inside Render
 		worldRenderer.startDrawingQuads();
 		worldRenderer.setNormal(0.0F, -1F, 0.0F);
-		this.renderFaceYNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.DOWN));
+		this.renderFaceYNeg(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.DOWN));
 		worldRenderer.setNormal(0.0F, 1.0F, 0.0F);
-		this.renderFaceYPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.UP));
+		this.renderFaceYPos(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.UP));
 		worldRenderer.setNormal(0.0F, 0.0F, -1F);
-		this.renderFaceZNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.NORTH));
+		this.renderFaceZNeg(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.NORTH));
 		worldRenderer.setNormal(0.0F, 0.0F, 1.0F);
-		this.renderFaceZPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.SOUTH));
+		this.renderFaceZPos(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.SOUTH));
 		worldRenderer.setNormal(-1F, 0.0F, 0.0F);
-		this.renderFaceXNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.WEST));
+		this.renderFaceXNeg(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.WEST));
 		worldRenderer.setNormal(1.0F, 0.0F, 0.0F);
-		this.renderFaceXPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.EAST));
+		this.renderFaceXPos(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.EAST));
 		tessellator.draw();
 		this.renderFromInside = false;
 		// Normal Render
 		worldRenderer.startDrawingQuads();
 		worldRenderer.setNormal(0.0F, -1F, 0.0F);
-		this.renderFaceYNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.DOWN));
+		this.renderFaceYNeg(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.DOWN));
 		worldRenderer.setNormal(0.0F, 1.0F, 0.0F);
-		this.renderFaceYPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.UP));
+		this.renderFaceYPos(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.UP));
 		worldRenderer.setNormal(0.0F, 0.0F, -1F);
-		this.renderFaceZNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.NORTH));
+		this.renderFaceZNeg(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.NORTH));
 		worldRenderer.setNormal(0.0F, 0.0F, 1.0F);
-		this.renderFaceZPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.SOUTH));
+		this.renderFaceZPos(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.SOUTH));
 		worldRenderer.setNormal(-1F, 0.0F, 0.0F);
-		this.renderFaceXNeg(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.WEST));
+		this.renderFaceXNeg(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.WEST));
 		worldRenderer.setNormal(1.0F, 0.0F, 0.0F);
-		this.renderFaceXPos(0.0D, 0.0D, 0.0D, render.getSidedTexture(EnumFacing.EAST));
+		this.renderFaceXPos(0.0D, 0.0D, 0.0D,
+				render.getSidedTexture(EnumFacing.EAST));
 		tessellator.draw();
 		return true;
 	}
 
 	public boolean renderStandardBlock(ISimpleBlockRenderingHandler render,
 			BlockPos pos) {
-		if(world == null)
+		if (world == null)
 			world = minecraftRB.theWorld;
 		Block block = this.world.getBlockState(pos).getBlock();
 		int l = this.world.getBlockState(pos).getBlock()
@@ -792,7 +805,7 @@ public class SimpleBlockRender {
 	public boolean renderStandardBlockWithColorMultiplier(Block block,
 			ISimpleBlockRenderingHandler render, BlockPos pos, float r,
 			float g, float b) {
-		if(world == null)
+		if (world == null)
 			world = minecraftRB.theWorld;
 		this.enableAO = false;
 		boolean flag = false;
