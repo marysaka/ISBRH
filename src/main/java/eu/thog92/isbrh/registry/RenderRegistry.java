@@ -90,7 +90,6 @@ public class RenderRegistry {
 	}
 
 	public boolean shouldRender3DInInventory(ItemStack stack) {
-		System.out.println("shouldRender3DInInventory");
 		int renderId = ((ItemBlock) stack.getItem()).getBlock().getRenderType();
 		if (!renders.containsKey(renderId))
 			return false;

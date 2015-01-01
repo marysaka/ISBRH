@@ -1,7 +1,5 @@
 package eu.thog92.isbrh.coremod;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -36,7 +34,6 @@ public class RITransformer implements ITransformHandler {
 					.equals("(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
 					|| (method.name.equals("a") && method.desc
 							.equals("(Lamj;Lcxe;)V"))) {
-				System.out.println(method.name);
 				boolean ob = method.name.equals("a");
 
 				String transformType = "net/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType", desc = "(Lnet/minecraft/client/renderer/entity/RenderItem;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
@@ -116,16 +113,6 @@ public class RITransformer implements ITransformHandler {
 		ClassWriter writer = new ClassWriter(0);
 		classNode.accept(writer);
 		byte[] patched = writer.toByteArray();
-		FileOutputStream out;
-		try {
-			out = new FileOutputStream("RenderItem.class");
-			out.write(patched);
-
-			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		return patched;
 	}

@@ -1,10 +1,6 @@
 package eu.thog92.isbrh.coremod;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -42,28 +38,6 @@ public class BaseClassTransformater implements IClassTransformer {
 			if (handlers.get(name) == null)
 				return bytes;
 			return handlers.get(name).transform(contextName, bytes);
-		}
-		return bytes;
-	}
-
-	public byte[] patchClass(String name, byte[] bytes, File location) {
-		try {
-			ZipFile zip = new ZipFile(location);
-			ZipEntry entry = zip.getEntry(name.replace('.', '/') + ".class");
-			if (entry == null) {
-				System.out.println("[ISBRH]:" + name + " not found in "
-						+ location.getName());
-			} else {
-				// serialize the class file into the bytes array
-				InputStream zin = zip.getInputStream(entry);
-				bytes = new byte[(int) entry.getSize()];
-				zin.read(bytes);
-				zin.close();
-				System.out.println("[ISBRH]: " + "Class " + name + " patched!");
-			}
-			zip.close();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return bytes;
 	}
