@@ -30,7 +30,7 @@ public class RenderAccessHook {
             GlStateManager.enableRescaleNormal();
             TileEntityItemStackRenderer.instance.renderByItem(stack);
         } else if (stack.getItem() instanceof ItemBlock
-                && ((ItemBlock) stack.getItem()).getBlock().getRenderType() > 3) {
+                && ((ItemBlock) stack.getItem()).getBlock().getRenderType() > 4) {
             RenderRegistry.instance().renderInventoryBlock(stack, transformType);
         } else {
             GlStateManager.translate(-0.5F, -0.5F, -0.5F);

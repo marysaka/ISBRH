@@ -22,7 +22,7 @@ public class RenderRegistry {
 
     private static final RenderRegistry INSTANCE = new RenderRegistry();
 
-    private int nextRenderId = 4;
+    private int nextRenderId = 5;
 
     private Map<Integer, ISimpleBlockRenderingHandler> renders = Maps
             .newHashMap();
