@@ -33,6 +33,9 @@ public class RITransformer implements ITransformHandler {
         String blockClass = "net/minecraft/block/Block";
         String getRenderTypeName = "getRenderType";
         String getRenderTypeDesc = "()I";
+        String glStateManagerClass = "net/minecraft/client/renderer/GlStateManager";
+        String pushMatrixName = "pushMatrix";
+        String popMatrixName = "popMatrix";
         boolean ob;
         while (iterator.hasNext()) {
             MethodNode method = iterator.next();
@@ -56,6 +59,9 @@ public class RITransformer implements ITransformHandler {
                     getRenderTypeName = "b";
                     blockClass = "atr";
                     methodDesc = "(Lamj;Lcxe;Lcmz;)V";
+                    glStateManagerClass = "cjm";
+                    pushMatrixName = "E";
+                    popMatrixName = "F";
                 }
                 String getBlockDesc = "()L" + blockClass + ";";
                 InsnList toInject = new InsnList();
@@ -137,7 +143,7 @@ public class RITransformer implements ITransformHandler {
 
         }
 
-        /*if(renderItemMethod != null)
+        if(renderItemMethod != null)
         {
             MethodNode newMethod = new MethodNode(Opcodes.ACC_PUBLIC, renderItemMethod.name, methodDesc, null, renderItemMethod.exceptions.toArray(new String[renderItemMethod.exceptions.size()]));
             LabelNode label = new LabelNode();
@@ -154,23 +160,33 @@ public class RITransformer implements ITransformHandler {
             toInject.add(new InsnNode(Opcodes.ICONST_4));
             toInject.add(new JumpInsnNode(Opcodes.IF_ICMPLE, label));
             toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                    glStateManagerClass,
+                    pushMatrixName,
+                    "()V",
+                    false));
+            toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
                     "eu/thog92/isbrh/registry/RenderRegistry",
                     "instance",
                     "()Leu/thog92/isbrh/registry/RenderRegistry;",
                     false));
             toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            toInject.add(new FieldInsnNode(Opcodes.GETSTATIC,
-                    transformType, "NONE", "L" + transformType + ";"));
+            toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
             toInject.add(new MethodInsnNode(
                     Opcodes.INVOKEVIRTUAL,
                     "eu/thog92/isbrh/registry/RenderRegistry",
                     "renderInventoryBlock", desc, false));
+            toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                    glStateManagerClass,
+                    popMatrixName,
+                    "()V",
+                    false));
             toInject.add(new JumpInsnNode(Opcodes.GOTO, label));
             toInject.add(label);
+            toInject.add(new InsnNode(Opcodes.RETURN));
             newMethod.instructions.insert(toInject);
             classNode.methods.add(newMethod);
             System.out.println("Adding renderItem new method");
-        }*/
+        }
 
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
