@@ -10,18 +10,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 
 public interface ISimpleBlockRenderingHandler {
-	
-	public abstract void renderInventoryBlock(ItemStack itemStack, TransformType transformType, int renderId);
 
-	public abstract boolean renderWorldBlock(IBlockAccess world, BlockPos pos, IBlockState state, int renderId, WorldRenderer renderer);
+    public abstract void renderInventoryBlock(ItemStack itemStack, TransformType transformType, int renderId);
 
-	public abstract void renderBlockBrightness(int renderId, IBlockState state, float brightness);
+    public abstract boolean renderWorldBlock(IBlockAccess world, BlockPos pos, IBlockState state, int renderId, WorldRenderer renderer);
 
-	public abstract void loadTextures(TextureLoader loader);
+    public abstract void renderBlockBrightness(int renderId, IBlockState state, float brightness);
 
-	public abstract boolean shouldRender3DInInventory(int renderId);
+    public abstract void loadTextures(TextureLoader loader);
 
-	public abstract int getRenderId();
+    public abstract boolean shouldRender3DInInventory(int renderId);
 
-	public abstract TextureAtlasSprite getSidedTexture(EnumFacing facing);
+    public abstract int getRenderId();
+
+    public abstract TextureAtlasSprite getSidedTexture(EnumFacing facing);
 }

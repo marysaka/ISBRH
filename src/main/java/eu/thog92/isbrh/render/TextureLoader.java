@@ -5,18 +5,18 @@ import net.minecraft.util.ResourceLocation;
 
 public class TextureLoader {
 
-	private TextureMap textureMap;
+    private TextureMap textureMap;
 
-	public void setTextureMap(TextureMap newMap) {
-		this.textureMap = newMap;
-	}
+    public TextureMap getTextureMap() {
+        return this.textureMap;
+    }
 
-	public TextureMap getTextureMap() {
-		return this.textureMap;
-	}
+    public void setTextureMap(TextureMap newMap) {
+        this.textureMap = newMap;
+    }
 
-	public boolean registerTexture(ResourceLocation location) {
-		return this.textureMap.setTextureEntry(location.toString(),
-				this.textureMap.registerSprite(location));
-	}
+    public boolean registerTexture(ResourceLocation location) {
+        return this.textureMap.setTextureEntry(location.toString(),
+                this.textureMap.registerSprite(location));
+    }
 }
