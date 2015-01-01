@@ -62,44 +62,6 @@ public class RenderRegistry {
         instance().renders.put(renderId, handler);
     }
 
-    public static void renderItemBody(RenderItem renderItem, ItemStack stack,
-                                      IBakedModel model, TransformType transformType) {
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(0.5F, 0.5F, 0.5F);
-
-        if (model.isBuiltInRenderer()) {
-            GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            GlStateManager.enableRescaleNormal();
-            TileEntityItemStackRenderer.instance.renderByItem(stack);
-        } else if (stack.getItem() instanceof ItemBlock
-                && ((ItemBlock) stack.getItem()).getBlock().getRenderType() > 3) {
-            instance().renderInventoryBlock(stack, transformType);
-        } else {
-            GlStateManager.translate(-0.5F, -0.5F, -0.5F);
-            renderItem.renderModel(model, stack);
-
-            if (stack.hasEffect()) {
-                renderItem.renderEffect(model);
-            }
-        }
-
-        GlStateManager.popMatrix();
-    }
-
-    public static boolean shouldRenderItemIn3DBody(RenderItem renderItem,
-                                                   ItemStack stack) {
-        IBakedModel ibakedmodel = renderItem.getItemModelMesher().getItemModel(
-                stack);
-        if (ibakedmodel == null
-                || ibakedmodel == renderItem.getItemModelMesher()
-                .getModelManager().getMissingModel())
-            return RenderRegistry.instance().shouldRender3DInInventory(stack);
-
-        return ibakedmodel.isGui3d();
-    }
-
     public boolean renderBlock(int renderId, IBlockState state, BlockPos pos,
                                IBlockAccess world, WorldRenderer renderer) {
         if (!renders.containsKey(renderId))

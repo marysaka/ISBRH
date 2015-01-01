@@ -45,7 +45,7 @@ public class RITransformer implements ITransformHandler {
                         transformType, "NONE", "L" + transformType + ";"));
                 method.instructions.add(new MethodInsnNode(
                         Opcodes.INVOKESTATIC,
-                        "eu/thog92/isbrh/registry/RenderRegistry",
+                        "eu/thog92/isbrh/coremod/RenderAccessHook",
                         "renderItemBody", desc, false));
                 method.instructions.add(new InsnNode(Opcodes.RETURN));
             } else if ((method.name.equals("renderItemModelTransform") && method.desc
@@ -71,7 +71,7 @@ public class RITransformer implements ITransformHandler {
                                     .add(new VarInsnNode(Opcodes.ALOAD, 3));
                             newInstruction.add(new MethodInsnNode(
                                     Opcodes.INVOKESTATIC,
-                                    "eu/thog92/isbrh/registry/RenderRegistry",
+                                    "eu/thog92/isbrh/coremod/RenderAccessHook",
                                     "renderItemBody", desc, false));
                         } else
                             newInstruction.add(abstractInsnNode);
@@ -95,7 +95,7 @@ public class RITransformer implements ITransformHandler {
                 method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 1));
                 method.instructions.add(new MethodInsnNode(
                         Opcodes.INVOKESTATIC,
-                        "eu/thog92/isbrh/registry/RenderRegistry",
+                        "eu/thog92/isbrh/coremod/RenderAccessHook",
                         "shouldRenderItemIn3DBody", desc, false));
                 method.instructions.add(new InsnNode(Opcodes.IRETURN));
             }
