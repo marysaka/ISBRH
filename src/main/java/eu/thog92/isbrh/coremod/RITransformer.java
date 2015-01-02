@@ -1,16 +1,27 @@
 package eu.thog92.isbrh.coremod;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
-import scala.tools.nsc.transform.SpecializeTypes;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 public class RITransformer implements ITransformHandler {
 
@@ -129,7 +140,7 @@ public class RITransformer implements ITransformHandler {
                 ob = method.name.equals("a");
                 String shouldRenderItemIn3DBodyDesc = "(Lnet/minecraft/client/renderer/entity/RenderItem;Lnet/minecraft/item/ItemStack;)Z";
                 if (ob)
-                    desc = "(Lcqh;Lamj;)Z";
+                    shouldRenderItemIn3DBodyDesc = "(Lcqh;Lamj;)Z";
                 method.instructions.clear();
                 method.localVariables = new ArrayList<LocalVariableNode>();
                 method.instructions.add(new VarInsnNode(Opcodes.ALOAD, 0));
@@ -143,11 +154,15 @@ public class RITransformer implements ITransformHandler {
 
         }
 
-        if(renderItemMethod != null)
+        /*if(renderItemMethod != null)
         {
             MethodNode newMethod = new MethodNode(Opcodes.ACC_PUBLIC, renderItemMethod.name, methodDesc, null, renderItemMethod.exceptions.toArray(new String[renderItemMethod.exceptions.size()]));
+            
             LabelNode label = new LabelNode();
+            LabelNode label2 = new LabelNode();
             InsnList toInject = new InsnList();
+            
+            
             toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
             toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
             toInject.add(new TypeInsnNode(Opcodes.INSTANCEOF, itemBlockClass));
@@ -160,11 +175,6 @@ public class RITransformer implements ITransformHandler {
             toInject.add(new InsnNode(Opcodes.ICONST_4));
             toInject.add(new JumpInsnNode(Opcodes.IF_ICMPLE, label));
             toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-                    glStateManagerClass,
-                    pushMatrixName,
-                    "()V",
-                    false));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
                     "eu/thog92/isbrh/registry/RenderRegistry",
                     "instance",
                     "()Leu/thog92/isbrh/registry/RenderRegistry;",
@@ -175,18 +185,23 @@ public class RITransformer implements ITransformHandler {
                     Opcodes.INVOKEVIRTUAL,
                     "eu/thog92/isbrh/registry/RenderRegistry",
                     "renderInventoryBlock", desc, false));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-                    glStateManagerClass,
-                    popMatrixName,
-                    "()V",
-                    false));
-            toInject.add(new JumpInsnNode(Opcodes.GOTO, label));
+            toInject.add(new JumpInsnNode(Opcodes.GOTO, label2));
             toInject.add(label);
+            
+            toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
+            toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+            toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
+            toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
+                    classNode.name,
+                    renderItemMethod.name,
+                    renderItemMethod.desc,
+                    false));
+            toInject.add(label2);
             toInject.add(new InsnNode(Opcodes.RETURN));
             newMethod.instructions.insert(toInject);
             classNode.methods.add(newMethod);
             System.out.println("Adding renderItem new method");
-        }
+        }*/
 
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
