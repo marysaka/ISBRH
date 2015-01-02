@@ -18,10 +18,12 @@ public class BaseClassTransformater implements IClassTransformer {
                 "net.minecraft.client.renderer.BlockRendererDispatcher", "cll");
         classToPatch.put("net.minecraft.client.renderer.entity.RenderItem",
                 "cqh");
+        classToPatch.put("net.minecraft.client.renderer.entity.RenderEntityItem", "cqf");
         handlers.put("net.minecraft.client.renderer.BlockRendererDispatcher",
                 new BRDTransformer());
         handlers.put("net.minecraft.client.renderer.entity.RenderItem",
                 new RITransformer());
+        handlers.put("net.minecraft.client.renderer.entity.RenderEntityItem", new RenderEntityItemTransformer());
 
     }
 

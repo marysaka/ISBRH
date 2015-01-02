@@ -35,6 +35,9 @@ public class RITransformer implements ITransformHandler {
         MethodNode newMethod = null;
         String methodDesc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
         String transformType = "net/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType";
+        String transformTypeNONE = "NONE";
+        String transformTypeThirdPerson = "THIRD_PERSON";
+        String transformTypeGUI = "GUI";
         String desc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
         String itemStackClass = "net/minecraft/item/ItemStack";
         String itemBlockClass = "net/minecraft/item/ItemBlock";
@@ -66,6 +69,9 @@ public class RITransformer implements ITransformHandler {
                     getRenderTypeName = "b";
                     blockClass = "atr";
                     methodDesc = "(Lamj;Lcxe;Lcmz;)V";
+                    transformTypeNONE = "a";
+                    transformTypeThirdPerson = "b";
+                    transformTypeGUI = "e";
                     glStateManagerClass = "cjm";
                     pushMatrixName = "E";
                     popMatrixName = "F";
@@ -135,6 +141,36 @@ public class RITransformer implements ITransformHandler {
                                 .equals("(Lamj;Lcxe;)V"))) {
                             newInstruction
                                     .add(new VarInsnNode(Opcodes.ALOAD, 3));
+                            newInstruction.add(new MethodInsnNode(
+                                    Opcodes.INVOKEVIRTUAL,
+                                    methodInsnNode.owner,
+                                    newMethod.name, methodDesc, false));
+                        } else
+                            newInstruction.add(abstractInsnNode);
+                    } else {
+                        newInstruction.add(abstractInsnNode);
+                    }
+                }
+                method.instructions = newInstruction;
+            }
+            else if ((method.name.equals("renderItemIntoGUI") && method.desc
+                    .equals("(Lnet/minecraft/item/ItemStack;II)V"))
+                    || (method.name.equals("a") && method.desc
+                    .equals("(Lamj;II)V"))) {
+                ob = method.name.equals("a");
+                InsnList newInstruction = new InsnList();
+                for (int i = 0; i < method.instructions.size(); i++) {
+                    AbstractInsnNode abstractInsnNode = method.instructions
+                            .get(i);
+                    if (abstractInsnNode instanceof MethodInsnNode) {
+                        MethodInsnNode methodInsnNode = (MethodInsnNode) abstractInsnNode;
+                        if ((methodInsnNode.name.equals("renderItem") && methodInsnNode.desc
+                                .equals("(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
+                                || (methodInsnNode.name.equals("a") && methodInsnNode.desc
+                                .equals("(Lamj;Lcxe;)V"))) {
+
+                            newInstruction.add(new FieldInsnNode(Opcodes.GETSTATIC,
+                                    transformType, transformTypeGUI, "L" + transformType + ";"));
                             newInstruction.add(new MethodInsnNode(
                                     Opcodes.INVOKEVIRTUAL,
                                     methodInsnNode.owner,
