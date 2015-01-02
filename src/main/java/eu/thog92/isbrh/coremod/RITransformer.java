@@ -121,7 +121,7 @@ public class RITransformer implements ITransformHandler {
                                         "renderInventoryBlock", desc, false));
                                 toInject.add(new JumpInsnNode(Opcodes.GOTO, jumpInsnNode.label));
                                 toInject.add(label);
-                                method.instructions.insert(jumpInsnNode.getNext(), toInject);
+                               // method.instructions.insert(jumpInsnNode.getNext(), toInject);
                                 renderItemMethod = method;
                                 System.out.println("PATCH");
                                 break;
@@ -154,7 +154,7 @@ public class RITransformer implements ITransformHandler {
 
         }
 
-        /*if(renderItemMethod != null)
+        if(renderItemMethod != null)
         {
             MethodNode newMethod = new MethodNode(Opcodes.ACC_PUBLIC, renderItemMethod.name, methodDesc, null, renderItemMethod.exceptions.toArray(new String[renderItemMethod.exceptions.size()]));
             
@@ -201,7 +201,7 @@ public class RITransformer implements ITransformHandler {
             newMethod.instructions.insert(toInject);
             classNode.methods.add(newMethod);
             System.out.println("Adding renderItem new method");
-        }*/
+        }
 
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
