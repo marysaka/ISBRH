@@ -32,7 +32,7 @@ public class RITransformer implements ITransformHandler {
         classReader.accept(classNode, 0);
         List<MethodNode> methods = classNode.methods;
         Iterator<MethodNode> iterator = methods.iterator();
-        MethodNode renderItemMethod = null;
+        MethodNode newMethod = null;
         String methodDesc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
         String transformType = "net/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType";
         String desc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
@@ -55,10 +55,6 @@ public class RITransformer implements ITransformHandler {
                     || (method.name.equals("a") && method.desc
                     .equals("(Lamj;Lcxe;)V"))) {
                 ob = method.name.equals("a");
-
-
-
-
                 if (ob) {
                     transformType = "cmz";
                     desc = "(Lamj;Lcmz;)V";
@@ -74,66 +70,84 @@ public class RITransformer implements ITransformHandler {
                     pushMatrixName = "E";
                     popMatrixName = "F";
                 }
-                String getBlockDesc = "()L" + blockClass + ";";
+                newMethod = new MethodNode(Opcodes.ACC_PUBLIC, method.name, methodDesc, null, method.exceptions.toArray(new String[method.exceptions.size()]));
+
+                LabelNode label = new LabelNode();
+                LabelNode label2 = new LabelNode();
                 InsnList toInject = new InsnList();
 
 
-                for(int i = 0; i < method.instructions.size(); i++)
-                {
-                    AbstractInsnNode abstractInsnNode = method.instructions.get(i);
-                    System.out.println(abstractInsnNode + ":" + Integer.toHexString(abstractInsnNode.getOpcode()));
-                    if(abstractInsnNode instanceof MethodInsnNode)
-                    {
-                        MethodInsnNode targetMethod = ((MethodInsnNode)abstractInsnNode);
-                        //System.out.println(targetMethod.name);
-                        if ((targetMethod.name.equals("renderByItem") && targetMethod.desc
-                                .equals("(Lnet/minecraft/item/ItemStack;)V"))
-                                || (targetMethod.name.equals("a") && targetMethod.desc
-                                .equals("(Lamj;)V"))) {
-                            AbstractInsnNode targetGoto = targetMethod.getNext();
-                            if(targetGoto instanceof  JumpInsnNode)
-                            {
-                                JumpInsnNode jumpInsnNode = ((JumpInsnNode) targetGoto);
-                                LabelNode label = new LabelNode();
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
+                toInject.add(new TypeInsnNode(Opcodes.INSTANCEOF, itemBlockClass));
+                toInject.add(new JumpInsnNode(Opcodes.IFEQ, label));
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
+                toInject.add(new TypeInsnNode(Opcodes.CHECKCAST, itemBlockClass));
+                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemBlockClass, getBlockName, "()L" + blockClass + ";", false));
+                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, blockClass, getRenderTypeName, getRenderTypeDesc, false));
+                toInject.add(new InsnNode(Opcodes.ICONST_4));
+                toInject.add(new JumpInsnNode(Opcodes.IF_ICMPLE, label));
+                toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                        "eu/thog92/isbrh/registry/RenderRegistry",
+                        "instance",
+                        "()Leu/thog92/isbrh/registry/RenderRegistry;",
+                        false));
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 3));
+                toInject.add(new MethodInsnNode(
+                        Opcodes.INVOKEVIRTUAL,
+                        "eu/thog92/isbrh/registry/RenderRegistry",
+                        "renderInventoryBlock", desc, false));
+                toInject.add(new JumpInsnNode(Opcodes.GOTO, label2));
+                toInject.add(label);
 
-                                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
-                                toInject.add(new TypeInsnNode(Opcodes.INSTANCEOF, itemBlockClass));
-                                toInject.add(new JumpInsnNode(Opcodes.IFEQ, label));
-                                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
-                                toInject.add(new TypeInsnNode(Opcodes.CHECKCAST, itemBlockClass));
-                                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemBlockClass, getBlockName, getBlockDesc, false));
-                                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, blockClass, getRenderTypeName, getRenderTypeDesc, false));
-                                toInject.add(new InsnNode(Opcodes.ICONST_4));
-                                toInject.add(new JumpInsnNode(Opcodes.IF_ICMPLE, label));
-                                toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-                                        "eu/thog92/isbrh/registry/RenderRegistry",
-                                        "instance",
-                                        "()Leu/thog92/isbrh/registry/RenderRegistry;",
-                                        false));
-                                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-                                toInject.add(new FieldInsnNode(Opcodes.GETSTATIC,
-                                        transformType, "NONE", "L" + transformType + ";"));
-                                toInject.add(new MethodInsnNode(
-                                        Opcodes.INVOKEVIRTUAL,
-                                        "eu/thog92/isbrh/registry/RenderRegistry",
-                                        "renderInventoryBlock", desc, false));
-                                toInject.add(new JumpInsnNode(Opcodes.GOTO, jumpInsnNode.label));
-                                toInject.add(label);
-                               // method.instructions.insert(jumpInsnNode.getNext(), toInject);
-                                renderItemMethod = method;
-                                System.out.println("PATCH");
-                                break;
-                            }
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
+                toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
+                toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
+                        classNode.name,
+                        method.name,
+                        method.desc,
+                        false));
+                toInject.add(label2);
+                toInject.add(new InsnNode(Opcodes.RETURN));
+                newMethod.instructions.insert(toInject);
+
+                System.out.println("Adding renderItem new method");
 
 
-                        }
-
+            }
+            else if ((method.name.equals("renderItemModelTransform") && method.desc
+                    .equals("(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
+                    || (method.name.equals("a") && method.desc
+                    .equals("(Lamj;Lcxe;Lcmz;)V"))) {
+                ob = method.name.equals("a");
+                InsnList newInstruction = new InsnList();
+                for (int i = 0; i < method.instructions.size(); i++) {
+                    AbstractInsnNode abstractInsnNode = method.instructions
+                            .get(i);
+                    if (abstractInsnNode instanceof MethodInsnNode) {
+                        MethodInsnNode methodInsnNode = (MethodInsnNode) abstractInsnNode;
+                        if ((methodInsnNode.name.equals("renderItem") && methodInsnNode.desc
+                                .equals("(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;)V"))
+                                || (methodInsnNode.name.equals("a") && methodInsnNode.desc
+                                .equals("(Lamj;Lcxe;)V"))) {
+                            newInstruction
+                                    .add(new VarInsnNode(Opcodes.ALOAD, 3));
+                            newInstruction.add(new MethodInsnNode(
+                                    Opcodes.INVOKEVIRTUAL,
+                                    methodInsnNode.owner,
+                                    methodInsnNode.name, methodDesc, false));
+                        } else
+                            newInstruction.add(abstractInsnNode);
+                    } else {
+                        newInstruction.add(abstractInsnNode);
                     }
                 }
-
-            }  else if ((method.name.equals("shouldRenderItemIn3D") && method.desc
+                method.instructions = newInstruction;
+            }
+            else if ((method.name.equals("shouldRenderItemIn3D") && method.desc
                     .equals("(Lnet/minecraft/item/ItemStack;)Z"))
                     || (method.name.equals("a") && method.desc
                     .equals("(Lamj;)Z"))) {
@@ -153,55 +167,8 @@ public class RITransformer implements ITransformHandler {
             }
 
         }
+        classNode.methods.add(newMethod);
 
-        if(renderItemMethod != null)
-        {
-            MethodNode newMethod = new MethodNode(Opcodes.ACC_PUBLIC, renderItemMethod.name, methodDesc, null, renderItemMethod.exceptions.toArray(new String[renderItemMethod.exceptions.size()]));
-            
-            LabelNode label = new LabelNode();
-            LabelNode label2 = new LabelNode();
-            InsnList toInject = new InsnList();
-            
-            
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
-            toInject.add(new TypeInsnNode(Opcodes.INSTANCEOF, itemBlockClass));
-            toInject.add(new JumpInsnNode(Opcodes.IFEQ, label));
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemStackClass, getItemName, getItemDesc, false));
-            toInject.add(new TypeInsnNode(Opcodes.CHECKCAST, itemBlockClass));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, itemBlockClass, getBlockName, "()L" + blockClass + ";", false));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL, blockClass, getRenderTypeName, getRenderTypeDesc, false));
-            toInject.add(new InsnNode(Opcodes.ICONST_4));
-            toInject.add(new JumpInsnNode(Opcodes.IF_ICMPLE, label));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-                    "eu/thog92/isbrh/registry/RenderRegistry",
-                    "instance",
-                    "()Leu/thog92/isbrh/registry/RenderRegistry;",
-                    false));
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
-            toInject.add(new MethodInsnNode(
-                    Opcodes.INVOKEVIRTUAL,
-                    "eu/thog92/isbrh/registry/RenderRegistry",
-                    "renderInventoryBlock", desc, false));
-            toInject.add(new JumpInsnNode(Opcodes.GOTO, label2));
-            toInject.add(label);
-            
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 0));
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 1));
-            toInject.add(new VarInsnNode(Opcodes.ALOAD, 2));
-            toInject.add(new MethodInsnNode(Opcodes.INVOKEVIRTUAL,
-                    classNode.name,
-                    renderItemMethod.name,
-                    renderItemMethod.desc,
-                    false));
-            toInject.add(label2);
-            toInject.add(new InsnNode(Opcodes.RETURN));
-            newMethod.instructions.insert(toInject);
-            classNode.methods.add(newMethod);
-            System.out.println("Adding renderItem new method");
-        }
 
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
