@@ -70,7 +70,7 @@ public class RITransformer implements ITransformHandler {
                     pushMatrixName = "E";
                     popMatrixName = "F";
                 }
-                newMethod = new MethodNode(Opcodes.ACC_PUBLIC, method.name, methodDesc, null, method.exceptions.toArray(new String[method.exceptions.size()]));
+                newMethod = new MethodNode(Opcodes.ACC_PUBLIC, "renderItem", methodDesc, null, null);
 
                 LabelNode label = new LabelNode();
                 LabelNode label2 = new LabelNode();
@@ -138,7 +138,7 @@ public class RITransformer implements ITransformHandler {
                             newInstruction.add(new MethodInsnNode(
                                     Opcodes.INVOKEVIRTUAL,
                                     methodInsnNode.owner,
-                                    methodInsnNode.name, methodDesc, false));
+                                    newMethod.name, methodDesc, false));
                         } else
                             newInstruction.add(abstractInsnNode);
                     } else {
