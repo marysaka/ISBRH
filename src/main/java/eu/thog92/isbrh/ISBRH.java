@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = "isbrhcore", name = "ISBRH Core", acceptedMinecraftVersions = "[1.8]")
 public class ISBRH {
-
+	 private static boolean exempleEnabled = Boolean.parseBoolean(System.getProperty("isbrhCore.enableExemple", "false"));
     public static final Block test = new BlockTest().setUnlocalizedName("test");
     public static final ResourceLocation textureLocation = new ResourceLocation(
             "isbrhcore:blocks/test");
@@ -30,9 +30,14 @@ public class ISBRH {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        testId = RenderRegistry.getNextAvailableRenderId();
-        GameRegistry.registerBlock(test, "test");
-        RenderRegistry.registerBlockHandler(new RenderTest());
+    	if(exempleEnabled)
+    	{
+    		System.out.println("Registering ISBRH Block Exemple...");
+            testId = RenderRegistry.getNextAvailableRenderId();
+            GameRegistry.registerBlock(test, "test");
+            RenderRegistry.registerBlockHandler(new RenderTest());
+    	}
+
     }
 
     @SubscribeEvent

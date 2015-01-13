@@ -120,8 +120,6 @@ public class RITransformer implements ITransformHandler {
                 toInject.add(new InsnNode(Opcodes.RETURN));
                 newMethod.instructions.insert(toInject);
 
-                System.out.println("Adding renderItem new method");
-
 
             }
             else if ((method.name.equals("renderItemModelTransform") && method.desc

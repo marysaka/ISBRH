@@ -38,7 +38,7 @@ if (System.env.BUILD_NUMBER != null) version = "$version.$System.env.BUILD_NUMBE
 minecraft {
     version = "${config.minecraft.version}-${config.forge.version}-${config.minecraft.version}"
     runDir = "run"
-    mappings = "snapshot_nodoc_20141130"
+    mappings = "snapshot_nodoc_20150113"
 }
 
 processResources
