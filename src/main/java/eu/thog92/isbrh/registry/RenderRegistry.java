@@ -80,6 +80,7 @@ public class RenderRegistry {
 
     public void renderInventoryBlock(ItemStack stack,
                                      TransformType transformType) {
+    	GlStateManager.enableRescaleNormal();
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
         int renderId = ((ItemBlock) stack.getItem()).getBlock().getRenderType();
@@ -88,6 +89,7 @@ public class RenderRegistry {
         renders.get(renderId).renderInventoryBlock(stack, transformType,
                 renderId);
         GlStateManager.popMatrix();
+        GlStateManager.disableRescaleNormal();
     }
 
     public boolean shouldRender3DInInventory(ItemStack stack) {

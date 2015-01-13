@@ -27,18 +27,18 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
     @Override
     public void renderInventoryBlock(ItemStack itemStack,
                                      TransformType transformType, int renderId) {
+    	
         Tessellator tessellator = Tessellator.getInstance();
         SimpleBlockRender render = new SimpleBlockRender();
         render.worldRenderer = tessellator.getWorldRenderer();
-
         render.setRenderBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.1F, 0.8F);
-        this.renderInInventory(tessellator, render);
+        this.renderInInventory(tessellator, render, transformType);
 
         render.setRenderBounds(0.45F, 0.1F, 0.45F, 0.55F, 0.8F, 0.55F);
-        this.renderInInventory(tessellator, render);
+        this.renderInInventory(tessellator, render, transformType);
 
         render.setRenderBounds(0.0F, 0.8F, 0.0F, 1F, 0.9F, 1F);
-        this.renderInInventory(tessellator, render);
+        this.renderInInventory(tessellator, render, transformType);
 
     }
 
@@ -98,9 +98,18 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
     }
 
     private void renderInInventory(Tessellator tessellator,
-                                   SimpleBlockRender render) {
+                                   SimpleBlockRender render, TransformType transformType) {
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         GlStateManager.pushMatrix();
+        
+    	if(transformType.equals(TransformType.THIRD_PERSON))
+    	{
+    		GlStateManager.scale(0.55F, 0.55F, 0.55F);
+    		GlStateManager.rotate(45, 1.0F, 0.0F, 0.0F);
+    		GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+    		GlStateManager.translate(-1.4F, -1.9F, -1F);
+    	}
+    		
         render.renderInventoryStandardBlock(this, tessellator);
         GlStateManager.popMatrix();
         GlStateManager.translate(0.5F, 0.5F, 0.5F);

@@ -10,9 +10,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by Thog92 on 02/01/2015.
- */
 public class RenderEntityItemTransformer implements ITransformHandler {
     @Override
     public byte[] transform(String className, byte[] buffer) {

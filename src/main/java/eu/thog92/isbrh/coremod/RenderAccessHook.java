@@ -25,12 +25,4 @@ public class RenderAccessHook {
 
         return ibakedmodel.isGui3d();
     }
-    
-    public void test(int i, int y)
-    {
-        if(i > y)
-            shouldRenderItemIn3DBody(null, null);
-        else
-            i = y;
-    }
 }
