@@ -1,14 +1,17 @@
 package eu.thog92.isbrh.coremod;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MethodNode;
 
 public class RenderEntityItemTransformer implements ITransformHandler {
     @Override
@@ -63,18 +66,7 @@ public class RenderEntityItemTransformer implements ITransformHandler {
         }
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
-        byte[] patched = writer.toByteArray();
-        try
-        {
-            FileOutputStream out = new FileOutputStream("RenderEntityItem.class");
-            out.write(patched);
-            out.close();
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-
-        return patched;
+        
+        return writer.toByteArray();
     }
 }

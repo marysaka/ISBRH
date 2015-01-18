@@ -94,7 +94,7 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
     @Override
     public TextureAtlasSprite getSidedTexture(EnumFacing facing) {
         return textureLoader.getTextureMap().getAtlasSprite(
-                "minecraft:blocks/planks_oak");
+                textureLocation.toString());
     }
 
     private void renderInInventory(Tessellator tessellator,

@@ -5,22 +5,21 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemStack;
 import eu.thog92.isbrh.registry.RenderRegistry;
 
-
 /**
- * Internal Class for methods than have been overrides
- * Will be remove sooner
+ * Internal Class for methods than have been overrides Will be remove sooner as
+ * possible
  */
 @Deprecated
 public class RenderAccessHook {
 
     @Deprecated
     public static boolean shouldRenderItemIn3DBody(RenderItem renderItem,
-                                                   ItemStack stack) {
+            ItemStack stack) {
         IBakedModel ibakedmodel = renderItem.getItemModelMesher().getItemModel(
                 stack);
         if (ibakedmodel == null
                 || ibakedmodel == renderItem.getItemModelMesher()
-                .getModelManager().getMissingModel())
+                        .getModelManager().getMissingModel())
             return RenderRegistry.instance().shouldRender3DInInventory(stack);
 
         return ibakedmodel.isGui3d();

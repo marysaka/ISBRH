@@ -1,14 +1,11 @@
 package eu.thog92.isbrh.coremod;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -35,8 +32,6 @@ public class RITransformer implements ITransformHandler {
         MethodNode newMethod = null;
         String methodDesc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
         String transformType = "net/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType";
-        String transformTypeNONE = "NONE";
-        String transformTypeThirdPerson = "THIRD_PERSON";
         String transformTypeGUI = "GUI";
         String desc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
         String itemStackClass = "net/minecraft/item/ItemStack";
@@ -47,9 +42,6 @@ public class RITransformer implements ITransformHandler {
         String blockClass = "net/minecraft/block/Block";
         String getRenderTypeName = "getRenderType";
         String getRenderTypeDesc = "()I";
-        String glStateManagerClass = "net/minecraft/client/renderer/GlStateManager";
-        String pushMatrixName = "pushMatrix";
-        String popMatrixName = "popMatrix";
         boolean ob;
         while (iterator.hasNext()) {
             MethodNode method = iterator.next();
@@ -69,12 +61,7 @@ public class RITransformer implements ITransformHandler {
                     getRenderTypeName = "b";
                     blockClass = "atr";
                     methodDesc = "(Lamj;Lcxe;Lcmz;)V";
-                    transformTypeNONE = "a";
-                    transformTypeThirdPerson = "b";
                     transformTypeGUI = "e";
-                    glStateManagerClass = "cjm";
-                    pushMatrixName = "E";
-                    popMatrixName = "F";
                 }
                 newMethod = new MethodNode(Opcodes.ACC_PUBLIC, "renderItem", methodDesc, null, null);
 
@@ -207,16 +194,6 @@ public class RITransformer implements ITransformHandler {
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
         byte[] patched = writer.toByteArray();
-        try
-        {
-            FileOutputStream out = new FileOutputStream("RenderItem.class");
-            out.write(patched);
-            out.close();
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
 
         return patched;
     }

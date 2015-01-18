@@ -1,22 +1,21 @@
 package eu.thog92.isbrh.registry;
 
-import com.google.common.collect.Maps;
-import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
-import eu.thog92.isbrh.render.TextureLoader;
+import java.util.Map;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
-import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import java.util.Map;
+import com.google.common.collect.Maps;
+
+import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
+import eu.thog92.isbrh.render.TextureLoader;
 
 public class RenderRegistry {
 
