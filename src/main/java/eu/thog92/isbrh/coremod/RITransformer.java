@@ -1,24 +1,13 @@
 package eu.thog92.isbrh.coremod;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LocalVariableNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class RITransformer implements ITransformHandler {
 
@@ -108,8 +97,7 @@ public class RITransformer implements ITransformHandler {
                 newMethod.instructions.insert(toInject);
 
 
-            }
-            else if ((method.name.equals("renderItemModelTransform") && method.desc
+            } else if ((method.name.equals("renderItemModelTransform") && method.desc
                     .equals("(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V"))
                     || (method.name.equals("a") && method.desc
                     .equals("(Lamj;Lcxe;Lcmz;)V"))) {
@@ -137,8 +125,7 @@ public class RITransformer implements ITransformHandler {
                     }
                 }
                 method.instructions = newInstruction;
-            }
-            else if ((method.name.equals("renderItemIntoGUI") && method.desc
+            } else if ((method.name.equals("renderItemIntoGUI") && method.desc
                     .equals("(Lnet/minecraft/item/ItemStack;II)V"))
                     || (method.name.equals("a") && method.desc
                     .equals("(Lamj;II)V"))) {
@@ -167,8 +154,7 @@ public class RITransformer implements ITransformHandler {
                     }
                 }
                 method.instructions = newInstruction;
-            }
-            else if ((method.name.equals("shouldRenderItemIn3D") && method.desc
+            } else if ((method.name.equals("shouldRenderItemIn3D") && method.desc
                     .equals("(Lnet/minecraft/item/ItemStack;)Z"))
                     || (method.name.equals("a") && method.desc
                     .equals("(Lamj;)Z"))) {

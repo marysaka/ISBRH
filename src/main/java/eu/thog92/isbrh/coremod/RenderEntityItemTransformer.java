@@ -1,17 +1,12 @@
 package eu.thog92.isbrh.coremod;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class RenderEntityItemTransformer implements ITransformHandler {
     @Override
@@ -24,16 +19,14 @@ public class RenderEntityItemTransformer implements ITransformHandler {
         String transformType = "net/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType";
         String methodDesc = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/resources/model/IBakedModel;Lnet/minecraft/client/renderer/block/model/ItemCameraTransforms$TransformType;)V";
         String transformTypeNONE = "NONE";
-        while(iterator.hasNext())
-        {
+        while (iterator.hasNext()) {
             MethodNode targetMethod = iterator.next();
             if ((targetMethod.name.equals("func_177075_a") && targetMethod.desc
                     .equals("(Lnet/minecraft/entity/item/EntityItem;DDDFF)V"))
                     || (targetMethod.name.equals("a") && targetMethod.desc
                     .equals("(Ladw;DDDFF)V"))) {
                 boolean ob = targetMethod.name.equals("a");
-                if(ob)
-                {
+                if (ob) {
                     transformType = "cmz";
                     transformTypeNONE = "a";
                     methodDesc = "(Lamj;Lcxe;Lcmz;)V";
@@ -66,7 +59,7 @@ public class RenderEntityItemTransformer implements ITransformHandler {
         }
         ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
-        
+
         return writer.toByteArray();
     }
 }

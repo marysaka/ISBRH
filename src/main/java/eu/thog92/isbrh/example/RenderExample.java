@@ -1,4 +1,4 @@
-package eu.thog92.isbrh.test;
+package eu.thog92.isbrh.example;
 
 import eu.thog92.isbrh.ISBRH;
 import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
@@ -18,7 +18,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 
-public class RenderTest implements ISimpleBlockRenderingHandler {
+public class RenderExample implements ISimpleBlockRenderingHandler {
 
     public final ResourceLocation textureLocation = new ResourceLocation(
             "isbrhcore:blocks/test");
@@ -27,7 +27,7 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
     @Override
     public void renderInventoryBlock(ItemStack itemStack,
                                      TransformType transformType, int renderId) {
-    	
+
         Tessellator tessellator = Tessellator.getInstance();
         SimpleBlockRender render = new SimpleBlockRender();
         render.worldRenderer = tessellator.getWorldRenderer();
@@ -101,15 +101,14 @@ public class RenderTest implements ISimpleBlockRenderingHandler {
                                    SimpleBlockRender render, TransformType transformType) {
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         GlStateManager.pushMatrix();
-        
-    	if(transformType.equals(TransformType.THIRD_PERSON))
-    	{
-    		GlStateManager.scale(0.55F, 0.55F, 0.55F);
-    		GlStateManager.rotate(45, 1.0F, 0.0F, 0.0F);
-    		GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
-    		GlStateManager.translate(-1.4F, -1.9F, -1F);
-    	}
-    		
+
+        if (transformType.equals(TransformType.THIRD_PERSON)) {
+            GlStateManager.scale(0.55F, 0.55F, 0.55F);
+            GlStateManager.rotate(45, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+            GlStateManager.translate(-1.4F, -1.9F, -1F);
+        }
+
         render.renderInventoryStandardBlock(this, tessellator);
         GlStateManager.popMatrix();
         GlStateManager.translate(0.5F, 0.5F, 0.5F);

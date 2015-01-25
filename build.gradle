@@ -67,12 +67,12 @@ jar {
 }
 
 runClient {
-    jvmArgs '-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin'
+    jvmArgs '-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin -isbrhCore.enableExemple=true'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
-    from sourceSets.main.allSource
+    from sourceSets.main.java
 }
 
 task devJar(type: Jar) {

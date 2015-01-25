@@ -11,6 +11,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+
+/**
+ * A simple class that add quads rendering (based on 1.7 RenderBlocks)
+ */
 public class SimpleBlockRender {
 
     public double renderMinX, renderMaxX, renderMinY, renderMaxY, renderMinZ,
@@ -40,14 +44,14 @@ public class SimpleBlockRender {
 
     public boolean enableAO;
     public boolean renderAllFaces;
-    private Minecraft minecraftRB;
+    private Minecraft minecraft;
     private World world;
 
     public SimpleBlockRender() {
         this.renderMaxX = 1.0;
         this.renderMaxY = 1.0;
         this.renderMaxZ = 1.0;
-        this.minecraftRB = Minecraft.getMinecraft();
+        this.minecraft = Minecraft.getMinecraft();
     }
 
     public SimpleBlockRender(WorldRenderer renderer) {
@@ -776,7 +780,7 @@ public class SimpleBlockRender {
     public boolean renderStandardBlock(ISimpleBlockRenderingHandler render,
                                        BlockPos pos) {
         if (world == null)
-            world = minecraftRB.theWorld;
+            world = minecraft.theWorld;
         Block block = this.world.getBlockState(pos).getBlock();
         int l = this.world.getBlockState(pos).getBlock()
                 .colorMultiplier(this.world, pos);
@@ -808,7 +812,7 @@ public class SimpleBlockRender {
                                                           ISimpleBlockRenderingHandler render, BlockPos pos, float r,
                                                           float g, float b) {
         if (world == null)
-            world = minecraftRB.theWorld;
+            world = minecraft.theWorld;
         this.enableAO = false;
         boolean flag = false;
         float f3 = 0.5F;

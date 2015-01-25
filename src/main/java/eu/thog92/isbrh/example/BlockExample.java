@@ -1,4 +1,4 @@
-package eu.thog92.isbrh.test;
+package eu.thog92.isbrh.example;
 
 import eu.thog92.isbrh.ISBRH;
 import net.minecraft.block.Block;
@@ -10,9 +10,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockTest extends Block {
+public class BlockExample extends Block {
 
-    public BlockTest() {
+    public BlockExample() {
         super(Material.iron);
         this.setCreativeTab(CreativeTabs.tabBlock);
     }
@@ -34,8 +34,7 @@ public class BlockTest extends Block {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos,
-                                        EnumFacing face) {
+    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return true;
     }
 

@@ -1,7 +1,8 @@
 package eu.thog92.isbrh.registry;
 
-import java.util.Map;
-
+import com.google.common.collect.Maps;
+import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
+import eu.thog92.isbrh.render.TextureLoader;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -12,10 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-import com.google.common.collect.Maps;
-
-import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
-import eu.thog92.isbrh.render.TextureLoader;
+import java.util.Map;
 
 public class RenderRegistry {
 
@@ -79,7 +77,7 @@ public class RenderRegistry {
 
     public void renderInventoryBlock(ItemStack stack,
                                      TransformType transformType) {
-    	GlStateManager.enableRescaleNormal();
+        GlStateManager.enableRescaleNormal();
         GlStateManager.pushMatrix();
         GlStateManager.scale(0.5F, 0.5F, 0.5F);
         int renderId = ((ItemBlock) stack.getItem()).getBlock().getRenderType();
