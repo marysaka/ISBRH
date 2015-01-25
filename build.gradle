@@ -30,7 +30,7 @@ ext {
 }
 
 version = config.mod.version
-group= "eu.thog92.isbrhcore"
+group= "eu.thog92"
 archivesBaseName = "isbrhcore"
 
 if (System.env.BUILD_NUMBER != null) version = "$version.$System.env.BUILD_NUMBER"
