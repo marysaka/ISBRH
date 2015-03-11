@@ -17,26 +17,14 @@ buildscript {
 
 apply plugin: 'forge'
 
-// Read properties file
-ext {
-    configFile = file "build.properties"
-
-    configFile.withReader {
-        // Load config.  It shall from now be referenced as simply config or project.config
-        def prop = new Properties()
-        prop.load(it)
-        config = new ConfigSlurper().parse prop
-    }
-}
-
-version = config.mod.version
+version = modVersion
 group= "eu.thog92"
 archivesBaseName = "isbrhcore"
 
 if (System.env.BUILD_NUMBER != null) version = "$version.$System.env.BUILD_NUMBER"
 
 minecraft {
-    version = "${config.minecraft.version}-${config.forge.version}-${config.minecraft.version}"
+    version = "${mcVersion}-latest"
     runDir = "run"
     mappings = "snapshot_nodoc_20150113"
 }
@@ -67,7 +55,7 @@ jar {
 }
 
 runClient {
-    jvmArgs '-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin -isbrhCore.enableExemple=true'
+    jvmArgs = ['-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin', '-DisbrhCore.enableExemple=true']
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
