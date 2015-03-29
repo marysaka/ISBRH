@@ -45,7 +45,9 @@ public class RenderExample implements ISimpleBlockRenderingHandler {
     @Override
     public boolean renderWorldBlock(IBlockAccess world, BlockPos pos,
                                     IBlockState state, int id, WorldRenderer renderer) {
+
         SimpleBlockRender render = new SimpleBlockRender();
+        render.renderAllFaces = true;
         render.worldRenderer = renderer;
 
         render.setRenderBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.1F, 0.8F);
@@ -93,8 +95,7 @@ public class RenderExample implements ISimpleBlockRenderingHandler {
 
     @Override
     public TextureAtlasSprite getSidedTexture(EnumFacing facing) {
-        return textureLoader.getTextureMap().getAtlasSprite(
-                textureLocation.toString());
+        return textureLoader.getTextureMap().getAtlasSprite(textureLocation.toString());
     }
 
     private void renderInInventory(Tessellator tessellator,

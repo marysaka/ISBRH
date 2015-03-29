@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -63,6 +64,13 @@ public class RenderRegistry {
                                IBlockAccess world, WorldRenderer renderer) {
         if (!renders.containsKey(renderId))
             return false;
+
+        if(!renderer.isDrawing)
+        {
+            renderer.startDrawing(7);
+            renderer.setVertexFormat(DefaultVertexFormats.BLOCK);
+            renderer.setTranslation((double)(-pos.getX()), (double)(-pos.getY()), (double)(-pos.getZ()));
+        }
         return renders.get(renderId).renderWorldBlock(world, pos, state,
                 renderId, renderer);
     }
@@ -77,12 +85,13 @@ public class RenderRegistry {
 
     public void renderInventoryBlock(ItemStack stack,
                                      TransformType transformType) {
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(0.5F, 0.5F, 0.5F);
+
         int renderId = ((ItemBlock) stack.getItem()).getBlock().getRenderType();
         if (!renders.containsKey(renderId))
             return;
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(0.5F, 0.5F, 0.5F);
         renders.get(renderId).renderInventoryBlock(stack, transformType,
                 renderId);
         GlStateManager.popMatrix();
