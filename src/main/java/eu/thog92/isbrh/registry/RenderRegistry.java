@@ -1,7 +1,10 @@
 package eu.thog92.isbrh.registry;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
+import eu.thog92.isbrh.render.ITextureHandler;
 import eu.thog92.isbrh.render.TextureLoader;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
+import java.util.List;
 import java.util.Map;
 
 public class RenderRegistry {
@@ -24,6 +28,8 @@ public class RenderRegistry {
 
     private Map<Integer, ISimpleBlockRenderingHandler> renders = Maps
             .newHashMap();
+    
+    private List<ITextureHandler> texturesHandlers = Lists.newArrayList();
 
     private TextureLoader loader = new TextureLoader();
 
@@ -44,7 +50,12 @@ public class RenderRegistry {
      * @param handler
      */
     public static void registerBlockHandler(ISimpleBlockRenderingHandler handler) {
-        instance().renders.put(handler.getRenderId(), handler);
+        registerBlockHandler(handler.getRenderId(), handler);
+    }
+    
+    public static void registerTextureHandler(ITextureHandler handler) {
+        if(!instance().texturesHandlers.contains(handler))
+            instance().texturesHandlers.add(handler);
     }
 
     /**
@@ -58,6 +69,7 @@ public class RenderRegistry {
     public static void registerBlockHandler(int renderId,
                                             ISimpleBlockRenderingHandler handler) {
         instance().renders.put(renderId, handler);
+        registerTextureHandler(handler);
     }
 
     public boolean renderBlock(int renderId, IBlockState state, BlockPos pos,
@@ -108,7 +120,7 @@ public class RenderRegistry {
     public void injectTexture(TextureMap map) {
         loader.setTextureMap(map);
 
-        for (ISimpleBlockRenderingHandler isbrh : renders.values())
-            isbrh.loadTextures(loader);
+        for (ITextureHandler itextured : texturesHandlers)
+            itextured.loadTextures(loader);
     }
 }

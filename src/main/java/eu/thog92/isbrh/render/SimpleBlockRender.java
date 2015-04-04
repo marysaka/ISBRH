@@ -728,56 +728,60 @@ public class SimpleBlockRender {
     }
 
     public boolean renderInventoryStandardBlock(
-            ISimpleBlockRenderingHandler render, Tessellator tessellator) {
+            ITextureHandler textureManager, Tessellator tessellator) {
 
         this.renderFromInside = true;
         // Inside Render
         worldRenderer.startDrawingQuads();
         worldRenderer.setNormal(0.0F, -1F, 0.0F);
         this.renderFaceYNeg(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.DOWN));
+                textureManager.getSidedTexture(EnumFacing.DOWN));
         worldRenderer.setNormal(0.0F, 1.0F, 0.0F);
         this.renderFaceYPos(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.UP));
+                textureManager.getSidedTexture(EnumFacing.UP));
         worldRenderer.setNormal(0.0F, 0.0F, -1F);
         this.renderFaceZNeg(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.NORTH));
+                textureManager.getSidedTexture(EnumFacing.NORTH));
         worldRenderer.setNormal(0.0F, 0.0F, 1.0F);
         this.renderFaceZPos(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.SOUTH));
+                textureManager.getSidedTexture(EnumFacing.SOUTH));
         worldRenderer.setNormal(-1F, 0.0F, 0.0F);
         this.renderFaceXNeg(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.WEST));
+                textureManager.getSidedTexture(EnumFacing.WEST));
         worldRenderer.setNormal(1.0F, 0.0F, 0.0F);
         this.renderFaceXPos(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.EAST));
+                textureManager.getSidedTexture(EnumFacing.EAST));
         tessellator.draw();
         this.renderFromInside = false;
         // Normal Render
         worldRenderer.startDrawingQuads();
         worldRenderer.setNormal(0.0F, -1F, 0.0F);
         this.renderFaceYNeg(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.DOWN));
+                textureManager.getSidedTexture(EnumFacing.DOWN));
         worldRenderer.setNormal(0.0F, 1.0F, 0.0F);
         this.renderFaceYPos(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.UP));
+                textureManager.getSidedTexture(EnumFacing.UP));
         worldRenderer.setNormal(0.0F, 0.0F, -1F);
         this.renderFaceZNeg(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.NORTH));
+                textureManager.getSidedTexture(EnumFacing.NORTH));
         worldRenderer.setNormal(0.0F, 0.0F, 1.0F);
         this.renderFaceZPos(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.SOUTH));
+                textureManager.getSidedTexture(EnumFacing.SOUTH));
         worldRenderer.setNormal(-1F, 0.0F, 0.0F);
         this.renderFaceXNeg(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.WEST));
+                textureManager.getSidedTexture(EnumFacing.WEST));
         worldRenderer.setNormal(1.0F, 0.0F, 0.0F);
         this.renderFaceXPos(0.0D, 0.0D, 0.0D,
-                render.getSidedTexture(EnumFacing.EAST));
+                textureManager.getSidedTexture(EnumFacing.EAST));
         tessellator.draw();
         return true;
     }
 
-    public boolean renderStandardBlock(ISimpleBlockRenderingHandler render,
+    /**
+     * Renders a standard cube block at the given coordinates.
+     * Args: textureManager, pos
+     */
+    public boolean renderStandardBlock(ITextureHandler textureManager,
                                        BlockPos pos) {
         if (world == null)
             world = minecraft.theWorld;
@@ -797,19 +801,19 @@ public class SimpleBlockRender {
             f2 = f5;
         }
         this.renderFromInside = true;
-        this.renderStandardBlockWithColorMultiplier(block, render, pos, f, f1,
+        boolean inside = this.renderStandardBlockWithColorMultiplier(block, textureManager, pos, f, f1,
                 f2);
         this.renderFromInside = false;
-        return this.renderStandardBlockWithColorMultiplier(block, render, pos,
+        return inside && this.renderStandardBlockWithColorMultiplier(block, textureManager, pos,
                 f, f1, f2);
     }
 
     /**
      * Renders a standard cube block at the given coordinates, with a given
-     * color ratio. Args: block, pos, r, g, b
+     * color ratio. Args: block, textureManager, pos, r, g, b
      */
     public boolean renderStandardBlockWithColorMultiplier(Block block,
-                                                          ISimpleBlockRenderingHandler render, BlockPos pos, float r,
+                                                          ITextureHandler textureManager, BlockPos pos, float r,
                                                           float g, float b) {
         if (world == null)
             world = minecraft.theWorld;
@@ -853,7 +857,7 @@ public class SimpleBlockRender {
                     .getMixedBrightnessForBlock(world, pos.down()));
             worldRenderer.setColorOpaque_F(f10, f13, f16);
             this.renderFaceYNeg(pos.getX(), pos.getY(), pos.getZ(),
-                    render.getSidedTexture(EnumFacing.DOWN));
+                    textureManager.getSidedTexture(EnumFacing.DOWN));
             flag = true;
         }
 
@@ -863,7 +867,7 @@ public class SimpleBlockRender {
                     .getMixedBrightnessForBlock(world, pos.up()));
             worldRenderer.setColorOpaque_F(f7, f8, f9);
             this.renderFaceYPos(pos.getX(), pos.getY(), pos.getZ(),
-                    render.getSidedTexture(EnumFacing.UP));
+                    textureManager.getSidedTexture(EnumFacing.UP));
             flag = true;
         }
 
@@ -874,7 +878,7 @@ public class SimpleBlockRender {
                     .getMixedBrightnessForBlock(world, pos.north()));
             worldRenderer.setColorOpaque_F(f11, f14, f17);
             this.renderFaceZNeg(pos.getX(), pos.getY(), pos.getZ(),
-                    render.getSidedTexture(EnumFacing.NORTH));
+                    textureManager.getSidedTexture(EnumFacing.NORTH));
 
             flag = true;
         }
@@ -886,7 +890,7 @@ public class SimpleBlockRender {
                     .getMixedBrightnessForBlock(world, pos.south()));
             worldRenderer.setColorOpaque_F(f11, f14, f17);
             this.renderFaceZPos(pos.getX(), pos.getY(), pos.getZ(),
-                    render.getSidedTexture(EnumFacing.SOUTH));
+                    textureManager.getSidedTexture(EnumFacing.SOUTH));
 
             flag = true;
         }
@@ -899,7 +903,7 @@ public class SimpleBlockRender {
             worldRenderer.setColorOpaque_F(f12, f15, f18);
             ;
             this.renderFaceXNeg(pos.getX(), pos.getY(), pos.getZ(),
-                    render.getSidedTexture(EnumFacing.WEST));
+                    textureManager.getSidedTexture(EnumFacing.WEST));
 
             flag = true;
         }
@@ -911,7 +915,7 @@ public class SimpleBlockRender {
                     .getMixedBrightnessForBlock(world, pos.east()));
             worldRenderer.setColorOpaque_F(f12, f15, f18);
             this.renderFaceXPos(pos.getX(), pos.getY(), pos.getZ(),
-                    render.getSidedTexture(EnumFacing.EAST));
+                    textureManager.getSidedTexture(EnumFacing.EAST));
 
             flag = true;
         }

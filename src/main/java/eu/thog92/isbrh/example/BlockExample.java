@@ -1,17 +1,29 @@
 package eu.thog92.isbrh.example;
 
 import eu.thog92.isbrh.ISBRH;
+import eu.thog92.isbrh.render.ITextureHandler;
+import eu.thog92.isbrh.render.TextureLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockExample extends Block {
+public class BlockExample extends Block implements ITextureHandler
+{
+
+    @SideOnly(Side.CLIENT)
+    private TextureLoader textureLoader;
+    
+    @SideOnly(Side.CLIENT)
+    private final ResourceLocation textureLocation = new ResourceLocation(
+            "isbrhcore:blocks/test");
 
     public BlockExample() {
         super(Material.iron);
@@ -48,6 +60,19 @@ public class BlockExample extends Block {
     public boolean isFullCube()
     {
         return false;
+    }
+
+    @Override
+    public TextureAtlasSprite getSidedTexture(EnumFacing facing)
+    {
+        return textureLoader.getTextureMap().getAtlasSprite(textureLocation.toString());
+    }
+
+    @Override
+    public void loadTextures(TextureLoader loader)
+    {
+        this.textureLoader = loader;
+        loader.registerTexture(textureLocation);
     }
 
 }

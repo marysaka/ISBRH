@@ -3,11 +3,13 @@ package eu.thog92.isbrh;
 import eu.thog92.isbrh.example.BlockExample;
 import eu.thog92.isbrh.example.RenderExample;
 import eu.thog92.isbrh.registry.RenderRegistry;
+import eu.thog92.isbrh.render.ITextureHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -46,6 +48,7 @@ public class ISBRH {
             testId = RenderRegistry.getNextAvailableRenderId();
             GameRegistry.registerBlock(test, "test");
             RenderRegistry.registerBlockHandler(new RenderExample());
+            RenderRegistry.registerTextureHandler((ITextureHandler) test);
         }
 
     }
