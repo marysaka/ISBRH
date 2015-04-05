@@ -2,7 +2,6 @@ package eu.thog92.isbrh.example;
 
 import eu.thog92.isbrh.ISBRH;
 import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
-import eu.thog92.isbrh.render.ITextureHandler;
 import eu.thog92.isbrh.render.SimpleBlockRender;
 import eu.thog92.isbrh.render.TextureLoader;
 import net.minecraft.block.Block;
@@ -25,18 +24,20 @@ public class RenderExample implements ISimpleBlockRenderingHandler {
     @Override
     public void renderInventoryBlock(ItemStack itemStack,
                                      TransformType transformType, int renderId) {
-
+        
+        BlockExample block = (BlockExample) Block.getBlockFromItem(itemStack.getItem());
+        
         Tessellator tessellator = Tessellator.getInstance();
         SimpleBlockRender render = new SimpleBlockRender();
         render.worldRenderer = tessellator.getWorldRenderer();
         render.setRenderBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.1F, 0.8F);
-        this.renderInInventory(tessellator, render, transformType);
+        this.renderInInventory(tessellator, render, block, transformType);
 
         render.setRenderBounds(0.45F, 0.1F, 0.45F, 0.55F, 0.8F, 0.55F);
-        this.renderInInventory(tessellator, render, transformType);
+        this.renderInInventory(tessellator, render, block, transformType);
 
         render.setRenderBounds(0.0F, 0.8F, 0.0F, 1F, 0.9F, 1F);
-        this.renderInInventory(tessellator, render, transformType);
+        this.renderInInventory(tessellator, render, block, transformType);
 
     }
 
@@ -94,12 +95,12 @@ public class RenderExample implements ISimpleBlockRenderingHandler {
     }
 
     @Override
-    public TextureAtlasSprite getSidedTexture(EnumFacing facing) {
+    public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing) {
         return null;
     }
 
     private void renderInInventory(Tessellator tessellator,
-                                   SimpleBlockRender render, TransformType transformType) {
+                                   SimpleBlockRender render, BlockExample block, TransformType transformType) {
         GlStateManager.translate(-0.5F, -0.5F, -0.5F);
         GlStateManager.pushMatrix();
 
@@ -110,7 +111,7 @@ public class RenderExample implements ISimpleBlockRenderingHandler {
             GlStateManager.translate(-1.4F, -1.9F, -1F);
         }
 
-        render.renderInventoryStandardBlock((ITextureHandler) ISBRH.test, tessellator);
+        render.renderInventoryStandardBlock(block, block.getDefaultState(), tessellator);
         GlStateManager.popMatrix();
         GlStateManager.translate(0.5F, 0.5F, 0.5F);
     }

@@ -5,6 +5,7 @@ import eu.thog92.isbrh.render.ITextureHandler;
 import eu.thog92.isbrh.render.TextureLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.BlockPos;
@@ -63,7 +64,7 @@ public class BlockExample extends Block implements ITextureHandler
     }
 
     @Override
-    public TextureAtlasSprite getSidedTexture(EnumFacing facing)
+    public TextureAtlasSprite getSidedTexture(IBlockState state, EnumFacing facing)
     {
         return textureLoader.getTextureMap().getAtlasSprite(textureLocation.toString());
     }
