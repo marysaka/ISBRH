@@ -18,7 +18,7 @@ public class BRDTransformer implements ITransformHandler {
         classReader.accept(classNode, 0);
         List<MethodNode> methods = classNode.methods;
         Iterator<MethodNode> iterator = methods.iterator();
-        int iconst = 0;
+        int ireturn = 0;
         while (iterator.hasNext()) {
             MethodNode m = iterator.next();
             boolean obfuscated;
@@ -35,9 +35,9 @@ public class BRDTransformer implements ITransformHandler {
                     desc = "(ILnet/minecraft/block/state/IBlockState;Lnet/minecraft/util/BlockPos;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/client/renderer/WorldRenderer;)Z";
                 for (int i = 0; i < m.instructions.size(); i++) {
                     AbstractInsnNode insn = m.instructions.get(i);
-                    if (insn.getOpcode() == Opcodes.ICONST_0) {
-                        iconst++;
-                        if (iconst != 3)
+                    if (insn.getOpcode() == Opcodes.IRETURN) {
+                        ireturn++;
+                        if (ireturn != 5)
                             continue;
 
                         toInject.add(new MethodInsnNode(Opcodes.INVOKESTATIC,

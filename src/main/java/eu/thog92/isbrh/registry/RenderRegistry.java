@@ -74,17 +74,11 @@ public class RenderRegistry {
 
     public boolean renderBlock(int renderId, IBlockState state, BlockPos pos,
                                IBlockAccess world, WorldRenderer renderer) {
-        if (!renders.containsKey(renderId))
-            return false;
-
-        if(!renderer.isDrawing)
-        {
-            renderer.startDrawing(7);
-            renderer.setVertexFormat(DefaultVertexFormats.BLOCK);
-            renderer.setTranslation((double)(-pos.getX()), (double)(-pos.getY()), (double)(-pos.getZ()));
-        }
-        return renders.get(renderId).renderWorldBlock(world, pos, state,
-                renderId, renderer);
+        if (renders.containsKey(renderId))
+            return renders.get(renderId).renderWorldBlock(world, pos, state,
+                    renderId, renderer);
+        
+        return false;
     }
 
     public void renderBlockBrightness(int renderId, IBlockState state,
