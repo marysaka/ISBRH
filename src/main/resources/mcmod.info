@@ -1,7 +1,7 @@
 [
 {
   "modid": "isbrhcore",
-  "name": "ISBRH Core",
+  "name": "ISBRH",
   "description": "ISBRH: The Return",
   "version": "${version}",
   "mcversion": "${mcversion}",

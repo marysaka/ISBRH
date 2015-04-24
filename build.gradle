@@ -50,7 +50,7 @@ processResources
 
 jar {
     manifest {
-        attributes("FMLCorePlugin": "eu.thog92.isbrh.coremod.ISBRHILoadingPlugin", "FMLAT": "isbrhcore_at.cfg", "FMLCorePluginContainsFMLMod": "true")
+        attributes("FMLAT": "isbrhcore_at.cfg")
     }
 }
 
