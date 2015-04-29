@@ -55,7 +55,7 @@ jar {
 }
 
 runClient {
-    jvmArgs = ['-Dfml.coreMods.load=eu.thog92.isbrh.coremod.ISBRHILoadingPlugin', '-DisbrhCore.enableExemple=true']
+    jvmArgs = ['-DisbrhCore.enableExemple=true']
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
