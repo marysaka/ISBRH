@@ -66,6 +66,9 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 task devJar(type: Jar) {
     from sourceSets.main.output
     classifier = 'dev'
+        manifest {
+        attributes("FMLAT": "isbrhcore_at.cfg")
+    }
 }
 
 artifacts {
