@@ -73,10 +73,10 @@ public class ISBRH
         RenderManager renderManager = mc.getRenderManager();
         IReloadableResourceManager resourceManager = ((IReloadableResourceManager) mc
                 .getResourceManager());
-
+        
         // Render Item Hook
         RenderItem item = new RenderItemISBRH(mc.getTextureManager(),
-                modelManager);
+                modelManager, mc.getRenderItem());
         ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc, item,
                 "X", "field_175621_X", "renderItem");
         ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc,

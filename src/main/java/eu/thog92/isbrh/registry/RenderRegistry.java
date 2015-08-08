@@ -1,24 +1,24 @@
 package eu.thog92.isbrh.registry;
 
+import java.util.List;
+import java.util.Map;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import eu.thog92.isbrh.render.ISimpleBlockRenderingHandler;
 import eu.thog92.isbrh.render.ITextureHandler;
 import eu.thog92.isbrh.render.TextureLoader;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.IBlockAccess;
-
-import java.util.List;
-import java.util.Map;
 
 public class RenderRegistry {
 

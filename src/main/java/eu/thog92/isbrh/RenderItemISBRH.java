@@ -1,5 +1,7 @@
 package eu.thog92.isbrh;
 
+import java.lang.reflect.Field;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -10,6 +12,7 @@ import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelManager;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import eu.thog92.isbrh.registry.RenderRegistry;
 
 public class RenderItemISBRH extends RenderItem
@@ -18,10 +21,23 @@ public class RenderItemISBRH extends RenderItem
     protected TextureManager textureManager;
 
     public RenderItemISBRH(TextureManager textureManager,
-            ModelManager modelManager)
+            ModelManager modelManager, RenderItem renderItem)
     {
         super(textureManager, modelManager);
         this.textureManager = textureManager;
+
+        try
+        {
+            Field mesher = ReflectionHelper.findField(RenderItem.class, "m", "field_175059_m", "itemModelMesher");
+            mesher.setAccessible(true);
+            mesher.set(this, renderItem.getItemModelMesher());
+        } catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        } catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -35,7 +51,8 @@ public class RenderItemISBRH extends RenderItem
             ItemCameraTransforms.TransformType cameraTransformType)
     {
         this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-        this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
+        this.textureManager.getTexture(TextureMap.locationBlocksTexture)
+                .setBlurMipmap(false, false);
         this.preTransform(stack);
         GlStateManager.enableRescaleNormal();
         GlStateManager.alphaFunc(516, 0.1F);
@@ -43,14 +60,16 @@ public class RenderItemISBRH extends RenderItem
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.pushMatrix();
 
-        model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, cameraTransformType);
+        model = net.minecraftforge.client.ForgeHooksClient
+                .handleCameraTransforms(model, cameraTransformType);
 
         renderItem(stack, model, cameraTransformType);
         GlStateManager.popMatrix();
         GlStateManager.disableRescaleNormal();
         GlStateManager.disableBlend();
         this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-        this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
+        this.textureManager.getTexture(TextureMap.locationBlocksTexture)
+                .restoreLastBlurMipmap();
     }
 
     @Override
@@ -75,13 +94,19 @@ public class RenderItemISBRH extends RenderItem
         GlStateManager.disableLighting();
         GlStateManager.popMatrix();
         this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-        this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
+        this.textureManager.getTexture(TextureMap.locationBlocksTexture)
+                .restoreLastBlurMipmap();
     }
 
-    public void renderItem(ItemStack paramItemStack, IBakedModel paramIBakedModel, ItemCameraTransforms.TransformType paramTransformType)
+    public void renderItem(ItemStack paramItemStack,
+            IBakedModel paramIBakedModel,
+            ItemCameraTransforms.TransformType paramTransformType)
     {
-        if (((paramItemStack.getItem() instanceof ItemBlock)) && (((ItemBlock) paramItemStack.getItem()).getBlock().getRenderType() > 4))
-            RenderRegistry.instance().renderInventoryBlock(paramItemStack, paramTransformType);
+        if (((paramItemStack.getItem() instanceof ItemBlock))
+                && (((ItemBlock) paramItemStack.getItem()).getBlock()
+                        .getRenderType() > 4))
+            RenderRegistry.instance().renderInventoryBlock(paramItemStack,
+                    paramTransformType);
         else
             super.renderItem(paramItemStack, paramIBakedModel);
     }
