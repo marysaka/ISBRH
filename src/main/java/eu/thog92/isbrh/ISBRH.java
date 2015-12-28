@@ -91,7 +91,7 @@ public class ISBRH
 
         // Render Block Dispatcher Hook
         BlockRendererDispatcher rendererDispatcher = new ISBRHDispatcher(
-                modelManager.getBlockModelShapes(), mc.gameSettings);
+                mc.getBlockRendererDispatcher(), modelManager.getBlockModelShapes(), mc.gameSettings);
         ObfuscationReflectionHelper.setPrivateValue(Minecraft.class, mc,
                 rendererDispatcher, "aM", "field_175618_aM",
                 "blockRenderDispatcher");
