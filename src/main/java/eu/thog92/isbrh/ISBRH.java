@@ -73,7 +73,7 @@ public class ISBRH
         RenderManager renderManager = mc.getRenderManager();
         IReloadableResourceManager resourceManager = ((IReloadableResourceManager) mc
                 .getResourceManager());
-        
+
         // Render Item Hook
         RenderItem item = new RenderItemISBRH(mc.getTextureManager(),
                 modelManager, mc.getRenderItem());
