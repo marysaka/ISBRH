@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemModelMesher;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -18,7 +17,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.model.IBakedModel;
 import net.minecraft.client.resources.model.ModelManager;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -106,12 +104,6 @@ public class RenderItemISBRH extends RenderItem
     }
 
     @Override
-    public void renderItemModel(ItemStack stack)
-    {
-        wrapped.renderItemModel(stack);
-    }
-
-    @Override
     public void renderModel(IBakedModel model, int color)
     {
         wrapped.renderModel(model, color);
@@ -136,9 +128,9 @@ public class RenderItemISBRH extends RenderItem
     }
 
     @Override
-    public void applyTransform(ItemTransformVec3f transform)
+    public boolean func_183005_a(ItemTransformVec3f transform)
     {
-        wrapped.applyTransform(transform);
+        return wrapped.func_183005_a(transform);
     }
 
     @Override
@@ -148,9 +140,9 @@ public class RenderItemISBRH extends RenderItem
     }
 
     @Override
-    public void drawRect(WorldRenderer renderer, int x, int y, int width, int height, int color)
+    public void func_181565_a(WorldRenderer p_181565_1_, int p_181565_2_, int p_181565_3_, int p_181565_4_, int p_181565_5_, int p_181565_6_, int p_181565_7_, int p_181565_8_, int p_181565_9_)
     {
-        wrapped.drawRect(renderer, x, y, width, height, color);
+        wrapped.func_181565_a(p_181565_1_, p_181565_2_, p_181565_3_, p_181565_4_, p_181565_5_, p_181565_6_, p_181565_7_, p_181565_8_, p_181565_9_);
     }
 
     @Override
@@ -170,7 +162,7 @@ public class RenderItemISBRH extends RenderItem
     public void renderItem(ItemStack stack, IBakedModel model)
     {
         if (isISBRH(stack))
-            this.renderItem(stack, TransformType.NONE);
+            this.renderISBRH(stack, TransformType.NONE);
         else
             wrapped.renderItem(stack, model);
     }
@@ -182,21 +174,20 @@ public class RenderItemISBRH extends RenderItem
         if (isISBRH(stack))
         {
             this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-            this.textureManager.getTexture(TextureMap.locationBlocksTexture)
-                    .setBlurMipmap(false, false);
+            this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
             this.preTransform(stack);
             GlStateManager.enableRescaleNormal();
             GlStateManager.alphaFunc(516, 0.1F);
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
             GlStateManager.pushMatrix();
-            renderItem(stack, cameraTransformType);
+            renderISBRH(stack, cameraTransformType);
+            GlStateManager.cullFace(1029);
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableBlend();
             this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-            this.textureManager.getTexture(TextureMap.locationBlocksTexture)
-                    .restoreLastBlurMipmap();
+            this.textureManager.getTexture(TextureMap.locationBlocksTexture).restoreLastBlurMipmap();
         } else
             wrapped.renderItemModelTransform(stack, model, cameraTransformType);
     }
@@ -206,27 +197,21 @@ public class RenderItemISBRH extends RenderItem
     {
         if (isISBRH(stack))
         {
-            IBakedModel ibakedmodel = this.getItemModelMesher().getItemModel(stack);
             GlStateManager.pushMatrix();
             this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-            this.textureManager.getTexture(TextureMap.locationBlocksTexture)
-                    .setBlurMipmap(false, false);
+            this.textureManager.getTexture(TextureMap.locationBlocksTexture).setBlurMipmap(false, false);
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableAlpha();
             GlStateManager.alphaFunc(516, 0.1F);
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(770, 771);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            setupGuiTransform(x, y, ibakedmodel.isGui3d());
-            applyTransform(ibakedmodel.getItemCameraTransforms().gui);
-            renderItem(stack, ItemCameraTransforms.TransformType.GUI);
+            this.setupGuiTransform(x, y, this.getItemModelMesher().getItemModel(stack).isGui3d());
+            this.renderISBRH(stack, ItemCameraTransforms.TransformType.GUI);
             GlStateManager.disableAlpha();
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableLighting();
             GlStateManager.popMatrix();
-            this.textureManager.bindTexture(TextureMap.locationBlocksTexture);
-            this.textureManager.getTexture(TextureMap.locationBlocksTexture)
-                    .restoreLastBlurMipmap();
         }
         else
         {
@@ -234,7 +219,7 @@ public class RenderItemISBRH extends RenderItem
         }
     }
 
-    private void renderItem(ItemStack paramItemStack, ItemCameraTransforms.TransformType paramTransformType)
+    private void renderISBRH(ItemStack paramItemStack, ItemCameraTransforms.TransformType paramTransformType)
     {
         RenderRegistry.instance().renderInventoryBlock(paramItemStack, paramTransformType);
     }

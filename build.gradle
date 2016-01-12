@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
 
@@ -26,7 +26,7 @@ if (System.env.BUILD_NUMBER != null) version = "$version.$System.env.BUILD_NUMBE
 minecraft {
     version = "${mcVersion}-latest"
     runDir = "run"
-    mappings = "stable_18"
+    mappings = project.mappings
 }
 
 processResources

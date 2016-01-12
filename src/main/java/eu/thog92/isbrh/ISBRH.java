@@ -32,7 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = "isbrhcore", name = "ISBRH", clientSideOnly = true, acceptedMinecraftVersions = "[1.8]")
+@Mod(modid = "isbrhcore", name = "ISBRH", clientSideOnly = true, acceptedMinecraftVersions = "[1.8.9]")
 public class ISBRH
 {
     public static final Block test = new BlockExample()
